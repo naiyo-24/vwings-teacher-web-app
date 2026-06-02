@@ -1,13 +1,9 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import { BookOpen, Home, CreditCard, Bell, HelpCircle, User, LogOut, Plane } from 'lucide-react';
+import { BookOpen, Home, CreditCard, HelpCircle, User, LogOut, Plane, Info, Menu, X } from 'lucide-react';
 
 import './App.css';
-
-// Auth Context
-export const AuthContext = createContext(null);
-export const useAuth = () => useContext(AuthContext);
+import { AnimatePresence } from 'framer-motion';
 
 // Lazy loading screens
 import Dashboard from './screens/Dashboard';
@@ -17,12 +13,16 @@ import CourseDetails from './screens/CourseDetails';
 import Classrooms from './screens/Classrooms';
 import Salary from './screens/Salary';
 import Profile from './screens/Profile';
+import AboutUs from './screens/AboutUs';
 import HelpCenter from './screens/HelpCenter';
 import Footer from './components/Footer';
 import BgParticlesComponent from './components/BgParticlesComponent';
 import SplashScreen from './components/SplashScreen';
+import NotificationBell from './components/NotificationBell';
+import { AuthContext, useAuth } from './AuthContext';
 
-const Sidebar = ({ handleLogout }) => {
+
+const Sidebar = ({ handleLogout, isOpen, onClose }) => {
   const location = useLocation();
   const { user } = useAuth();
 
@@ -38,11 +38,12 @@ const Sidebar = ({ handleLogout }) => {
     { name: 'Classrooms', path: '/classrooms', icon: <User size={20} /> },
     { name: 'Salary & Files', path: '/salary', icon: <CreditCard size={20} /> },
     { name: 'Profile', path: '/profile', icon: <User size={20} /> },
+    { name: 'About Us', path: '/about', icon: <Info size={20} /> },
     { name: 'Help Center', path: '/help', icon: <HelpCircle size={20} /> },
   ];
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
         <img src="/assets/V-Wings_Logo_nobg.png" alt="VWings24x7 Logo" style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
         <span style={{ color: 'var(--primary-yellow)', fontSize: '24px', fontWeight: '800', letterSpacing: '0.5px' }}>VWings24x7</span>
@@ -68,6 +69,7 @@ const Sidebar = ({ handleLogout }) => {
             key={link.name}
             to={link.path}
             className={`nav-item ${location.pathname === link.path ? 'active' : ''}`}
+            onClick={onClose}
           >
             {link.icon}
             {link.name}
@@ -76,7 +78,7 @@ const Sidebar = ({ handleLogout }) => {
       </div>
 
       <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <button className="nav-item" onClick={handleLogout} style={{ background: 'transparent', border: 'none', width: '100%', cursor: 'pointer', textAlign: 'left' }}>
+        <button className="nav-item" onClick={() => { handleLogout(); onClose(); }} style={{ background: 'transparent', border: 'none', width: '100%', cursor: 'pointer', textAlign: 'left' }}>
           <LogOut size={20} color="var(--danger)" />
           <span style={{ color: 'var(--danger)' }}>Logout</span>
         </button>
@@ -85,11 +87,8 @@ const Sidebar = ({ handleLogout }) => {
   );
 };
 
-const Topbar = () => {
+const Topbar = ({ onMenuToggle }) => {
   const { user } = useAuth();
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-  const [unreadCount, setUnreadCount] = useState(0);
   
   const getInitials = (name) => {
     if (!name) return 'ST';
@@ -98,70 +97,19 @@ const Topbar = () => {
   
   const photoUrl = user?.profile_photo ? `http://localhost:8000/${user.profile_photo.replace(/\\/g, '/')}` : null;
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const res = await fetch(`http://localhost:8000/announcements/get-all/role/teacher`);
-        if (res.ok) {
-          const data = await res.json();
-          const active = data.filter(a => a.active_status);
-          setNotifications(active.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
-          setUnreadCount(active.length);
-        }
-      } catch (err) {
-        console.error('Failed to fetch notifications', err);
-      }
-    };
-    fetchNotifications();
-  }, []);
-
-  const handleNotificationClick = () => {
-    setShowNotifications(!showNotifications);
-    setUnreadCount(0);
-  };
-
   return (
     <div className="topbar">
-      <div>
-        <h2 style={{ margin: 0, fontSize: '1.5rem' }}>Welcome back, {user?.full_name?.split(' ')[0] || 'Faculty'}! ✈️</h2>
-        <p style={{ margin: '4px 0 0 0', color: 'var(--text-muted)' }}>Ready for your next teaching session?</p>
-      </div>
-      <div className="user-profile" style={{ position: 'relative' }}>
-        <button className="btn-secondary" onClick={handleNotificationClick} style={{ padding: '10px', borderRadius: '50%', position: 'relative' }}>
-          <Bell size={20} />
-          {unreadCount > 0 && (
-            <span style={{ position: 'absolute', top: '-4px', right: '-4px', background: 'var(--danger)', color: 'white', fontSize: '10px', width: '18px', height: '18px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-              {unreadCount}
-            </span>
-          )}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: 0, overflow: 'hidden' }}>
+        <button className="hamburger-btn" onClick={onMenuToggle}>
+          <Menu size={22} />
         </button>
-
-        <AnimatePresence>
-          {showNotifications && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="glass-panel"
-              style={{ position: 'absolute', top: '50px', right: '50px', width: '320px', maxHeight: '400px', overflowY: 'auto', zIndex: 100, padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', background: 'rgba(15, 23, 42, 0.95)' }}
-            >
-              <h3 style={{ borderBottom: '1px solid var(--border)', paddingBottom: '8px', marginBottom: '4px', fontSize: '1.1rem' }}>Notifications</h3>
-              {notifications.length === 0 ? (
-                <p style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '16px 0' }}>No new notifications.</p>
-              ) : (
-                notifications.map(note => (
-                  <div key={note.announcement_id} style={{ padding: '12px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', borderLeft: '3px solid var(--primary-yellow)' }}>
-                    <h4 style={{ fontSize: '0.95rem', marginBottom: '4px', color: 'var(--primary-yellow)' }}>{note.headline}</h4>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>{note.description}</p>
-                    <small style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)', marginTop: '6px', display: 'block' }}>
-                      {new Date(note.created_at).toLocaleDateString()}
-                    </small>
-                  </div>
-                ))
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <div style={{ minWidth: 0, overflow: 'hidden' }}>
+          <h2 style={{ margin: 0, fontSize: '1.5rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Welcome back, {user?.full_name?.split(' ')[0] || 'Faculty'}! ✈️</h2>
+          <p style={{ margin: '4px 0 0 0', color: 'var(--text-muted)' }}>Ready for your next teaching session?</p>
+        </div>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+        <NotificationBell role="teacher" userId={user?.teacher_id || "teacher"} />
 
         <Link to="/profile" style={{ textDecoration: 'none' }}>
           {photoUrl ? (
@@ -171,22 +119,31 @@ const Topbar = () => {
           )}
         </Link>
       </div>
-    </div>
+      </div>
   );
 };
 
 const AppLayout = ({ children, handleLogout, isOnline }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  // Auto-close sidebar on route change (mobile)
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname]);
+
   return (
     <div className="app-container">
       <BgParticlesComponent />
-      <Sidebar handleLogout={handleLogout} />
+      <div className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`} onClick={() => setSidebarOpen(false)} />
+      <Sidebar handleLogout={handleLogout} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="main-content">
         {!isOnline && (
           <div style={{ background: 'var(--danger)', color: 'white', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
             You are currently offline. Check your internet connection.
           </div>
         )}
-        <Topbar />
+        <Topbar onMenuToggle={() => setSidebarOpen(prev => !prev)} />
         <AnimatePresence mode="wait">
           {children}
         </AnimatePresence>
@@ -298,6 +255,16 @@ function App() {
           isAuthenticated ? (
             <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
               <Profile />
+            </AppLayout>
+          ) : <Navigate to="/login" />
+        } 
+      />
+      <Route 
+        path="/about" 
+        element={
+          isAuthenticated ? (
+            <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
+              <AboutUs />
             </AppLayout>
           ) : <Navigate to="/login" />
         } 

@@ -89,7 +89,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   position: relative;
-  z-index: 9999 !important;
+  z-index: 50;
 }
 
 .user-profile {
@@ -182,3 +182,175 @@
 .animate-slide-up {
   animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ===== Hamburger Menu Button ===== */
+.hamburger-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  z-index: 1001;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ===== Mobile Sidebar Overlay ===== */
+.sidebar-overlay {
+  display: none;
+}
+
+/* ===== Responsive: Tablets (<=1024px) ===== */
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 24px 24px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .sidebar {
+    width: 240px;
+    padding: 20px;
+  }
+}
+
+/* ===== Responsive: Mobile (<=768px) ===== */
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: flex;
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10001;
+    overflow-y: auto;
+    background: rgba(10, 10, 20, 0.98);
+    backdrop-filter: blur(20px);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .app-container {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: 16px;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* TOPBAR: keep everything on ONE line */
+  .topbar {
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .topbar h2 {
+    font-size: 1rem !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .topbar p {
+    font-size: 0.75rem !important;
+    display: none;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .auth-container {
+    padding: 16px;
+  }
+
+  .auth-card {
+    padding: 28px 20px;
+    max-width: 100%;
+  }
+
+  .auth-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .avatar {
+    width: 34px;
+    height: 34px;
+    font-size: 0.85rem;
+  }
+
+  /* Glass panels stack in single column */
+  .glass-panel,
+  .glass-card {
+    overflow: hidden;
+  }
+}
+
+/* ===== Responsive: Small phones (<=480px) ===== */
+@media (max-width: 480px) {
+  .main-content {
+    padding: 10px;
+  }
+
+  .topbar {
+    padding: 10px 10px;
+    border-radius: 12px;
+  }
+
+  .topbar h2 {
+    font-size: 0.9rem !important;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-value {
+    font-size: 1.6rem;
+  }
+
+  .auth-card {
+    padding: 24px 16px;
+  }
+}
+

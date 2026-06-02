@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plane, LogIn } from 'lucide-react';
+import { useToast } from '../components/ToastContext';
 
 const Login = ({ onLogin }) => {
+  const toast = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     try {
@@ -24,16 +24,15 @@ const Login = ({ onLogin }) => {
 
       if (response.ok) {
         const data = await response.json();
-        // Optional: Save teacher data to localStorage if needed
-        // localStorage.setItem('teacher', JSON.stringify(data.teacher));
+        toast.success('Login successful! Welcome to the faculty portal.');
         onLogin(data.teacher);
       } else {
         const errorData = await response.json();
-        setError(errorData.detail || 'Login failed. Please check your credentials.');
+        toast.error(errorData.detail || 'Login failed. Please check your credentials.');
       }
     } catch (err) {
       console.error("Login error:", err);
-      setError('Network error. Unable to connect to the server.');
+      toast.error('Network error. Unable to connect to the server.');
     } finally {
       setLoading(false);
     }
@@ -64,12 +63,7 @@ const Login = ({ onLogin }) => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {error && (
-            <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', padding: '12px', borderRadius: '8px', marginBottom: '16px', textAlign: 'center', fontSize: '14px', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
-              {error}
-            </div>
-          )}
-          
+
           <div className="input-group">
             <label>Email</label>
             <input 

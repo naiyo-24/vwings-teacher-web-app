@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useToast } from '../components/ToastContext';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Download } from 'lucide-react';
 
 const CourseDetails = () => {
+  const toast = useToast();
   const { id } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
@@ -154,7 +156,7 @@ const CourseDetails = () => {
             fontWeight: '600',
             cursor: 'pointer'
           }}
-          onClick={() => alert('Downloading brochure...')}
+          onClick={() => toast.error('Downloading brochure...')}
         >
           <Download size={22} /> Download Brochure
         </button>
@@ -167,3 +169,4 @@ const CourseDetails = () => {
 };
 
 export default CourseDetails;
+

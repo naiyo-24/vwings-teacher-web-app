@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useToast } from '../components/ToastContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { User, Phone, MapPin, Briefcase, GraduationCap, CreditCard, Lock, Shield, Mail } from 'lucide-react';
 
 const Profile = () => {
+  const toast = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [teacher, setTeacher] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({ newPassword: '', confirmPassword: '' });
   
   // Form fields
   const [formData, setFormData] = useState({
@@ -14,23 +19,38 @@ const Profile = () => {
     email: '',
     phone_no: '',
     address: '',
-    alternative_phone_no: ''
+    alternative_phone_no: '',
+    qualification: '',
+    experience: '',
+    bank_account_no: '',
+    bank_account_name: '',
+    bank_branch_name: '',
+    ifsc_code: '',
+    upiid: ''
   });
 
   const fetchProfile = async () => {
     try {
+      // In a real app, you would fetch by specific ID or get the logged-in user
       const response = await fetch('http://localhost:8000/api/teachers/get-all');
       if (response.ok) {
         const data = await response.json();
         if (data.length > 0) {
-          const t = data[0]; // Mocking logged-in teacher as the first teacher
+          const t = data[0]; 
           setTeacher(t);
           setFormData({
             full_name: t.full_name || '',
             email: t.email || '',
             phone_no: t.phone_no || '',
             address: t.address || '',
-            alternative_phone_no: t.alternative_phone_no || ''
+            alternative_phone_no: t.alternative_phone_no || '',
+            qualification: t.qualification || '',
+            experience: t.experience || '',
+            bank_account_no: t.bank_account_no || '',
+            bank_account_name: t.bank_account_name || '',
+            bank_branch_name: t.bank_branch_name || '',
+            ifsc_code: t.ifsc_code || '',
+            upiid: t.upiid || ''
           });
           
           if (t.profile_photo) {
@@ -70,10 +90,13 @@ const Profile = () => {
     
     try {
       const updateData = new FormData();
-      updateData.append('full_name', formData.full_name);
-      updateData.append('phone_no', formData.phone_no);
-      updateData.append('address', formData.address);
-      updateData.append('alternative_phone_no', formData.alternative_phone_no);
+      Object.keys(formData).forEach(key => {
+        // Do not update email as it's typically readonly, but can be passed if backend allows
+        if(key !== 'email') {
+           updateData.append(key, formData[key]);
+        }
+      });
+
       if (selectedFile) {
         updateData.append('profile_photo', selectedFile);
       }
@@ -84,15 +107,47 @@ const Profile = () => {
       });
 
       if (response.ok) {
-        alert("Profile updated successfully!");
+        toast.success("Profile updated successfully!");
         setIsEditing(false);
         fetchProfile();
       } else {
-        alert("Failed to update profile.");
+        toast.error("Failed to update profile.");
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("An error occurred while saving.");
+      toast.error("An error occurred while saving.");
+    }
+  };
+
+  const handlePasswordChange = async () => {
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+    if (passwordForm.newPassword.length < 6) {
+      toast.error("Password must be at least 6 characters long.");
+      return;
+    }
+
+    try {
+      const updateData = new FormData();
+      updateData.append('password', passwordForm.newPassword);
+
+      const response = await fetch(`http://localhost:8000/api/teachers/put-by/${teacher.teacher_id}`, {
+        method: 'PUT',
+        body: updateData
+      });
+
+      if (response.ok) {
+        toast.success("Password changed successfully!");
+        setIsPasswordModalOpen(false);
+        setPasswordForm({ newPassword: '', confirmPassword: '' });
+      } else {
+        toast.error("Failed to change password.");
+      }
+    } catch (error) {
+      console.error("Error changing password:", error);
+      toast.error("An error occurred while changing password.");
     }
   };
 
@@ -102,98 +157,243 @@ const Profile = () => {
   };
 
   if (loading) {
-    return <div style={{ color: 'white', padding: '32px', textAlign: 'center' }}>Loading profile...</div>;
+    return <div style={{ color: 'white', padding: '32px', textAlign: 'center' }}>Loading profile details...</div>;
   }
 
   if (!teacher) {
     return <div style={{ color: 'white', padding: '32px', textAlign: 'center' }}>No teacher profile found.</div>;
   }
 
+  const inputStyle = {
+    background: isEditing ? 'var(--surface)' : 'rgba(255,255,255,0.03)',
+    border: isEditing ? '1px solid var(--primary)' : '1px solid rgba(255,255,255,0.05)',
+    color: 'var(--text-main)',
+    padding: '12px 16px',
+    borderRadius: '12px',
+    width: '100%',
+    transition: 'all 0.3s'
+  };
+
+  const readOnlyStyle = {
+    ...inputStyle,
+    background: 'rgba(255,255,255,0.02)',
+    border: '1px solid rgba(255,255,255,0.02)',
+    opacity: 0.8
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-panel" 
-      style={{ padding: '32px', maxWidth: '800px', margin: '0 auto' }}
+      style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '40px' }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-        <h2>Account Profile</h2>
-        <button className="btn-secondary" onClick={handleSave}>
+      {/* Header */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '24px', gap: '16px' }}>
+        <div>
+          <h2 style={{ margin: 0, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+            <User size={28} color="var(--primary-yellow)" /> My Profile
+          </h2>
+          <p style={{ margin: '4px 0 0', color: 'var(--text-muted)' }}>Manage your personal, professional, and financial details.</p>
+        </div>
+        <button className={isEditing ? "btn-primary" : "btn-secondary"} onClick={handleSave} style={{ minWidth: '150px' }}>
           {isEditing ? 'Save Changes' : 'Edit Profile'}
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: '32px', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1', minWidth: '250px' }}>
-          <div style={{ width: '120px', height: '120px', borderRadius: '50%', background: 'var(--gradient-hero)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', color: 'white', marginBottom: '24px', boxShadow: 'var(--glass-shadow)', position: 'relative', overflow: 'hidden' }}>
-            {profilePicPreview ? (
-              <img src={profilePicPreview} style={{width: '100%', height: '100%', objectFit: 'cover'}} alt="Profile" />
-            ) : (
-              getInitials(teacher.full_name)
-            )}
-            {isEditing && (
-              <label style={{position: 'absolute', bottom: 0, background: 'rgba(0,0,0,0.5)', width: '100%', textAlign: 'center', padding: '4px', cursor: 'pointer', fontSize: '0.8rem'}}>
-                Upload
-                <input type="file" style={{display: 'none'}} accept="image/*" onChange={handleFileChange}/>
-              </label>
-            )}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+        
+        {/* Left Column - Basics & Contact */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          
+          <div className="glass-panel" style={{ padding: '32px', textAlign: 'center' }}>
+            <div style={{ width: '140px', height: '140px', borderRadius: '50%', background: 'var(--gradient-hero)', margin: '0 auto 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3.5rem', color: 'white', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', position: 'relative', overflow: 'hidden' }}>
+              {profilePicPreview ? (
+                <img src={profilePicPreview} style={{width: '100%', height: '100%', objectFit: 'cover'}} alt="Profile" />
+              ) : (
+                getInitials(teacher.full_name)
+              )}
+              {isEditing && (
+                <label style={{position: 'absolute', bottom: 0, background: 'rgba(0,0,0,0.6)', width: '100%', textAlign: 'center', padding: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold', backdropFilter: 'blur(4px)'}}>
+                  Upload New
+                  <input type="file" style={{display: 'none'}} accept="image/*" onChange={handleFileChange}/>
+                </label>
+              )}
+            </div>
+            <h3 style={{ margin: 0, color: 'white', fontSize: '1.5rem' }}>{teacher.full_name}</h3>
+            <p style={{ margin: '4px 0 16px', color: 'var(--primary-yellow)', fontWeight: 'bold' }}>{teacher.teacher_id}</p>
+            <div style={{ display: 'inline-block', padding: '6px 16px', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>
+              Active Faculty
+            </div>
           </div>
-          <div className="input-group">
-            <label>Full Name</label>
-            <input 
-              type="text" 
-              name="full_name"
-              value={formData.full_name} 
-              onChange={handleInputChange}
-              disabled={!isEditing} 
-              style={{ background: isEditing ? 'var(--surface)' : 'rgba(255,255,255,0.05)' }}
-            />
-          </div>
-          <div className="input-group">
-            <label>Email ID (Read-only)</label>
-            <input type="text" value={formData.email} disabled style={{ background: 'rgba(255,255,255,0.02)' }} />
+
+          <div className="glass-panel" style={{ padding: '24px' }}>
+            <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'white', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px' }}>
+              <Phone size={18} color="var(--primary)" /> Contact Details
+            </h4>
+            
+            <div className="input-group" style={{ marginBottom: '16px' }}>
+              <label>Email ID</label>
+              <input type="text" value={formData.email} disabled style={readOnlyStyle} />
+            </div>
+            <div className="input-group" style={{ marginBottom: '16px' }}>
+              <label>Phone Number</label>
+              <input type="text" name="phone_no" value={formData.phone_no} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
+            </div>
+            <div className="input-group" style={{ marginBottom: '16px' }}>
+              <label>Alternative Phone</label>
+              <input type="text" name="alternative_phone_no" value={formData.alternative_phone_no} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
+            </div>
+            <div className="input-group">
+              <label>Residential Address</label>
+              <textarea name="address" value={formData.address} onChange={handleInputChange} disabled={!isEditing} style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }} />
+            </div>
           </div>
         </div>
-        
-        <div style={{ flex: '2', minWidth: '300px' }}>
-          <div className="input-group">
-            <label>Phone Number</label>
-            <input 
-              type="text" 
-              name="phone_no"
-              value={formData.phone_no} 
-              onChange={handleInputChange}
-              disabled={!isEditing} 
-              style={{ background: isEditing ? 'var(--surface)' : 'rgba(255,255,255,0.05)' }}
-            />
-          </div>
-          <div className="input-group">
-            <label>Address</label>
-            <input 
-              type="text" 
-              name="address"
-              value={formData.address} 
-              onChange={handleInputChange}
-              disabled={!isEditing} 
-              style={{ background: isEditing ? 'var(--surface)' : 'rgba(255,255,255,0.05)' }}
-            />
-          </div>
-          <div className="input-group">
-            <label>Emergency/Alternative Contact</label>
-            <input 
-              type="text" 
-              name="alternative_phone_no"
-              value={formData.alternative_phone_no} 
-              onChange={handleInputChange}
-              disabled={!isEditing} 
-              style={{ background: isEditing ? 'var(--surface)' : 'rgba(255,255,255,0.05)' }}
-            />
-          </div>
+
+        {/* Right Column - Pro & Financial */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           
-          <h3 style={{ marginTop: '32px', marginBottom: '16px' }}>Security</h3>
-          <button className="btn-secondary">Change Password</button>
+          <div className="glass-panel" style={{ padding: '24px' }}>
+            <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'white', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px' }}>
+              <Briefcase size={18} color="var(--secondary)" /> Professional Details
+            </h4>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+              <div className="input-group">
+                <label>Qualification</label>
+                <input type="text" name="qualification" value={formData.qualification} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
+              </div>
+              <div className="input-group">
+                <label>Experience (Years)</label>
+                <input type="text" name="experience" value={formData.experience} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
+              </div>
+            </div>
+
+            <div className="input-group">
+              <label>Assigned Courses</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                {teacher.courses_assigned && teacher.courses_assigned.length > 0 ? (
+                  teacher.courses_assigned.map(c => (
+                    <span key={c.course_id} style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', padding: '6px 12px', borderRadius: '8px', fontSize: '0.85rem' }}>
+                      {c.course_name}
+                    </span>
+                  ))
+                ) : (
+                  <span style={{ color: 'var(--text-muted)' }}>No courses assigned yet.</span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="glass-panel" style={{ padding: '24px' }}>
+            <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'white', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px' }}>
+              <CreditCard size={18} color="var(--success)" /> Financial Details
+            </h4>
+            
+            <div className="input-group" style={{ marginBottom: '16px' }}>
+              <label>Bank Account Number</label>
+              <input type="text" name="bank_account_no" value={formData.bank_account_no} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+              <div className="input-group">
+                <label>Bank Name</label>
+                <input type="text" name="bank_account_name" value={formData.bank_account_name} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
+              </div>
+              <div className="input-group">
+                <label>Branch Name</label>
+                <input type="text" name="bank_branch_name" value={formData.bank_branch_name} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+              <div className="input-group">
+                <label>IFSC Code</label>
+                <input type="text" name="ifsc_code" value={formData.ifsc_code} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
+              </div>
+              <div className="input-group">
+                <label>UPI ID</label>
+                <input type="text" name="upiid" value={formData.upiid} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
+              </div>
+            </div>
+            
+            <div className="input-group" style={{ background: 'rgba(16, 185, 129, 0.05)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(16, 185, 129, 0.1)' }}>
+              <label style={{ color: '#10b981' }}>Base Monthly Salary</label>
+              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white' }}>
+                ₹ {teacher.monthly_salary ? teacher.monthly_salary.toLocaleString() : '0'}
+              </div>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>*Excludes commissions and bonuses</span>
+            </div>
+          </div>
+
+          <div className="glass-panel" style={{ padding: '24px' }}>
+            <h4 style={{ margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'white' }}>
+              <Shield size={18} color="var(--warning)" /> Security
+            </h4>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '16px' }}>
+              Ensure your account is using a long, random password to stay secure.
+            </p>
+            <button className="btn-secondary" style={{ width: '100%' }} onClick={() => setIsPasswordModalOpen(true)}>
+              <Lock size={16} /> Change Password
+            </button>
+          </div>
+
         </div>
       </div>
+
+      <AnimatePresence>
+        {isPasswordModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', 
+              backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', 
+              justifyContent: 'center', zIndex: 99999
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              style={{
+                background: 'rgba(15, 15, 25, 0.95)', border: '1px solid var(--border)',
+                borderRadius: '16px', padding: '32px', maxWidth: '400px', width: '100%',
+                boxShadow: '0 24px 48px rgba(0,0,0,0.5)'
+              }}
+            >
+              <h3 style={{ margin: '0 0 24px', color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Lock size={20} color="var(--primary)" /> Change Password
+              </h3>
+              
+              <div className="input-group" style={{ marginBottom: '16px' }}>
+                <label>New Password</label>
+                <input 
+                  type="password" 
+                  value={passwordForm.newPassword} 
+                  onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})} 
+                  style={{...inputStyle, background: 'rgba(255,255,255,0.05)'}} 
+                  placeholder="Enter new password"
+                />
+              </div>
+              <div className="input-group" style={{ marginBottom: '24px' }}>
+                <label>Confirm New Password</label>
+                <input 
+                  type="password" 
+                  value={passwordForm.confirmPassword} 
+                  onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})} 
+                  style={{...inputStyle, background: 'rgba(255,255,255,0.05)'}} 
+                  placeholder="Confirm new password"
+                />
+              </div>
+              
+              <div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end' }}>
+                <button onClick={() => setIsPasswordModalOpen(false)} className="btn-secondary" style={{ padding: '10px 20px' }}>Cancel</button>
+                <button onClick={handlePasswordChange} className="btn-primary" style={{ padding: '10px 20px' }}>Update Password</button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

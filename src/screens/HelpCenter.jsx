@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, Mail, MapPin, Phone, User, MessageSquare, Send, CheckCircle } from 'lucide-react';
-import { useAuth } from '../App';
+import { useAuth } from '../AuthContext';
 
 const HelpCenter = () => {
   const { user } = useAuth();

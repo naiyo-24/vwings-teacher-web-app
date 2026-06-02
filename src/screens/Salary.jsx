@@ -43,7 +43,9 @@ const Salary = () => {
   const currentYear = new Date().getFullYear();
   const ytdSalaries = salaries.filter(s => s.year === currentYear);
   const monthlySalary = teacherInfo?.monthly_salary || 0;
-  const ytdEarnings = ytdSalaries.length * monthlySalary;
+  
+  const ytdEarnings = ytdSalaries.reduce((acc, curr) => acc + (curr.total_salary || 0), 0);
+  const lastPaycheck = salaries.length > 0 ? (salaries[salaries.length - 1].total_salary || 0) : 0;
 
   return (
     <motion.div 
@@ -61,7 +63,7 @@ const Salary = () => {
         </div>
         <div className="glass-card stat-card" style={{ background: 'rgba(16, 185, 129, 0.1)' }}>
           <p>Last Paycheck</p>
-          <div className="stat-value text-gradient">₹{monthlySalary.toLocaleString()}</div>
+          <div className="stat-value text-gradient">₹{lastPaycheck.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
         </div>
         <div className="glass-card stat-card" style={{ background: 'rgba(239, 68, 68, 0.1)' }}>
           <p>Upcoming Pay</p>
@@ -92,13 +94,13 @@ const Salary = () => {
                   <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                     <td style={{ padding: '12px' }}>{s.teacher_id}</td>
                     <td style={{ padding: '12px' }}>{monthNames[s.month - 1]} {s.year}</td>
-                    <td style={{ padding: '12px', color: 'var(--primary-yellow)' }}>₹{monthlySalary.toLocaleString()}</td>
-                    <td style={{ padding: '12px', color: 'var(--secondary)' }}>Processed</td>
+                    <td style={{ padding: '12px', color: 'var(--primary-yellow)' }}>₹{(s.total_salary || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    <td style={{ padding: '12px', color: 'var(--secondary)' }}>{s.status || 'Paid'}</td>
                     <td style={{ padding: '12px' }}>
                       <button 
                         className="btn-secondary" 
                         style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px' }} 
-                        onClick={() => window.open(`http://localhost:8000/api/salaries/download/${s.teacher_id}/${s.month}/${s.year}`, '_blank')}
+                        onClick={() => window.open(`http://localhost:8000/${s.file_path.replace(/\\\\/g, '/')}`, '_blank')}
                       >
                         <Download size={16} /> Download
                       </button>

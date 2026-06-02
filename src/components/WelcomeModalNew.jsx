@@ -13,7 +13,7 @@ const WelcomeModalNew = ({ isOpen, onClose }) => {
         style={{ padding: '40px', maxWidth: '500px', width: '100%', textAlign: 'center' }}
       >
         <h2>Welcome to VWings24x7</h2>
-        <p style={{ margin: '20px 0' }}>Get ready for your next flight lesson!</p>
+        <p style={{ margin: '20px 0' }}>Get ready for your next teaching session!</p>
         <button className="btn-primary" onClick={onClose}>Let's Go</button>
       </motion.div>
     </div>
