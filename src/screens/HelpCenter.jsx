@@ -28,7 +28,7 @@ const HelpCenter = () => {
     e.preventDefault();
     setStatus('submitting');
     try {
-      const response = await fetch('https://appbackend.vwings247.me/api/helpcenter/create', {
+      const response = await fetch('http://localhost:8000/api/helpcenter/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

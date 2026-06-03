@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 
-const API_BASE_URL = 'https://appbackend.vwings247.me';
+// const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'http://localhost:8000';
 
 const AdBanner = () => {
   const [ads, setAds] = useState([]);

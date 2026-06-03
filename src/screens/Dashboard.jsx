@@ -25,7 +25,7 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         // Fetch mock logged in teacher (first one)
-        const tchRes = await fetch('https://appbackend.vwings247.me/api/teachers/get-all');
+        const tchRes = await fetch('http://localhost:8000/api/teachers/get-all');
         let currentTeacher = null;
         if (tchRes.ok) {
           const tchData = await tchRes.json();
@@ -36,7 +36,7 @@ const Dashboard = () => {
         }
 
         // Fetch classrooms
-        const classRes = await fetch('https://appbackend.vwings247.me/api/classrooms/get-all');
+        const classRes = await fetch('http://localhost:8000/api/classrooms/get-all');
         if (classRes.ok) {
           const classData = await classRes.json();
           // Filter classes where teacher is assigned, or just show all if no teacher
@@ -45,7 +45,7 @@ const Dashboard = () => {
         }
 
         // Fetch announcements
-        const annRes = await fetch('https://appbackend.vwings247.me/announcements/get-all/role/teacher');
+        const annRes = await fetch('http://localhost:8000/announcements/get-all/role/teacher');
         if (annRes.ok) {
           const annData = await annRes.json();
           // Show active announcements targeted to teachers
@@ -54,7 +54,7 @@ const Dashboard = () => {
         }
 
         // Fetch featured courses
-        const coursesRes = await fetch('https://appbackend.vwings247.me/api/courses/get-all');
+        const coursesRes = await fetch('http://localhost:8000/api/courses/get-all');
         if (coursesRes.ok) {
           const coursesData = await coursesRes.json();
           setCourses(coursesData.slice(0, 4));
