@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: vwings_teacher_app_frontend
+    ports:
+      - "8007:8007"
+    restart: unless-stopped
+    networks:
+      - vwings_app_net
+
+networks:
+  vwings_app_net:
+    driver: bridge
+    # ipam:
+    #   config:
+    #     - subnet: 10.200.0.0/24;

@@ -3,7 +3,7 @@ import { Bell, CheckCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from './ToastContext';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://appbackend.vwings247.me';
 const WS_BASE_URL = 'ws://localhost:8000';
 
 const NotificationBell = ({ role, userId }) => {
@@ -48,7 +48,7 @@ const NotificationBell = ({ role, userId }) => {
           setIsWiggling(true);
           setTimeout(() => setIsWiggling(false), 1000);
           toast.success(`New Notification: ${newNotif.title}`);
-        } catch (err) {}
+        } catch (err) { }
       };
       ws.current.onclose = () => {
         setTimeout(connectWs, 5000);
@@ -69,7 +69,7 @@ const NotificationBell = ({ role, userId }) => {
       await fetch(`${API_BASE_URL}/api/notifications/mark-all-read/${role}/${userId}`, { method: 'PUT' });
       setNotifications(n => n.map(notif => ({ ...notif, is_read: true })));
       setUnreadCount(0);
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const markRead = async (id, isRead) => {
@@ -78,7 +78,7 @@ const NotificationBell = ({ role, userId }) => {
       await fetch(`${API_BASE_URL}/api/notifications/mark-read/${id}`, { method: 'PUT' });
       setNotifications(n => n.map(notif => notif.notification_id === id ? { ...notif, is_read: true } : notif));
       setUnreadCount(c => Math.max(0, c - 1));
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const dropdownStyle = {
@@ -102,15 +102,15 @@ const NotificationBell = ({ role, userId }) => {
         onClick={() => setShowNotifications(!showNotifications)}
         animate={isWiggling ? { rotate: [0, -10, 10, -10, 10, 0] } : {}}
         transition={{ duration: 0.5 }}
-        style={{ 
-          background: 'var(--background)', border: '1px solid var(--border)', 
-          color: 'var(--text-main)', cursor: 'pointer', padding: '10px', 
-          borderRadius: '12px', position: 'relative', display: 'flex', alignItems: 'center' 
+        style={{
+          background: 'var(--background)', border: '1px solid var(--border)',
+          color: 'var(--text-main)', cursor: 'pointer', padding: '10px',
+          borderRadius: '12px', position: 'relative', display: 'flex', alignItems: 'center'
         }}
       >
         <Bell size={18} />
         {unreadCount > 0 && (
-          <motion.span 
+          <motion.span
             initial={{ scale: 0 }} animate={{ scale: 1 }}
             style={{
               position: 'absolute', top: '-4px', right: '-4px',
@@ -126,7 +126,7 @@ const NotificationBell = ({ role, userId }) => {
 
       <AnimatePresence>
         {showNotifications && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}

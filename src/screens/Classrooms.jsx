@@ -15,7 +15,7 @@ const Classrooms = () => {
   const [uploadingAttachment, setUploadingAttachment] = useState(false);
   const wsRef = useRef(null);
   const fileInputRef = useRef(null);
-  
+
   // Get teacher credentials from AuthContext
   const { user } = useAuth();
   const teacherId = user?.teacher_id || 'TCH001';
@@ -39,7 +39,7 @@ const Classrooms = () => {
 
   const fetchClassrooms = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/classrooms/get/by-teacher/${teacherId}`);
+      const response = await fetch(`https://appbackend.vwings247.me/api/classrooms/get/by-teacher/${teacherId}`);
       if (response.ok) {
         const data = await response.json();
         setClassrooms(data);
@@ -59,9 +59,9 @@ const Classrooms = () => {
     setManagingClass(cls);
     setSelectedStudentIds(cls.student_ids || []);
     setIsManageModalOpen(true);
-    
+
     try {
-      const res = await fetch('http://localhost:8000/api/students/get-all');
+      const res = await fetch('https://appbackend.vwings247.me/api/students/get-all');
       if (res.ok) {
         const data = await res.json();
         setAllStudents(data);
@@ -82,12 +82,12 @@ const Classrooms = () => {
   const saveStudentAssignments = async () => {
     setSavingStudents(true);
     try {
-      const clsTeacherId = managingClass.teacher_ids?.[0] || teacherId; 
-      
+      const clsTeacherId = managingClass.teacher_ids?.[0] || teacherId;
+
       const formData = new FormData();
       formData.append('student_ids', JSON.stringify(selectedStudentIds));
 
-      const response = await fetch(`http://localhost:8000/api/classrooms/update-by/teacher/${clsTeacherId}/${managingClass.class_id}`, {
+      const response = await fetch(`https://appbackend.vwings247.me/api/classrooms/update-by/teacher/${clsTeacherId}/${managingClass.class_id}`, {
         method: 'PUT',
         body: formData
       });
@@ -95,7 +95,7 @@ const Classrooms = () => {
       if (response.ok) {
         toast.success('Students updated successfully!');
         setIsManageModalOpen(false);
-        fetchClassrooms(); 
+        fetchClassrooms();
       } else {
         const errorData = await response.json();
         toast.error(errorData.detail || 'Failed to update students.');
@@ -120,7 +120,7 @@ const Classrooms = () => {
       // Use logged in teacher ID
       let currentTeacherId = teacherId;
       try {
-        const tchRes = await fetch('http://localhost:8000/api/teachers/get-all');
+        const tchRes = await fetch('https://appbackend.vwings247.me/api/teachers/get-all');
         if (tchRes.ok) {
           const tchData = await tchRes.json();
           if (tchData.length > 0 && !user?.teacher_id) currentTeacherId = tchData[0].teacher_id;
@@ -137,7 +137,7 @@ const Classrooms = () => {
         formData.append('photo', newClassPhoto);
       }
 
-      const response = await fetch('http://localhost:8000/api/classrooms/create', {
+      const response = await fetch('https://appbackend.vwings247.me/api/classrooms/create', {
         method: 'POST',
         body: formData
       });
@@ -165,9 +165,9 @@ const Classrooms = () => {
 
   const deleteClassroom = async (classId) => {
     if (!await toast.confirm("Are you sure you want to delete this classroom? This action cannot be undone.")) return;
-    
+
     try {
-      const response = await fetch(`http://localhost:8000/api/classrooms/delete/${classId}`, {
+      const response = await fetch(`https://appbackend.vwings247.me/api/classrooms/delete/${classId}`, {
         method: 'DELETE',
       });
 
@@ -195,7 +195,7 @@ const Classrooms = () => {
 
     const loadMessagesAndConnect = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/classrooms/get-by/${activeClass.class_id}/messages`);
+        const res = await fetch(`https://appbackend.vwings247.me/api/classrooms/get-by/${activeClass.class_id}/messages`);
         if (res.ok) {
           const data = await res.json();
           const formattedHistory = data.map(msg => ({
@@ -214,7 +214,7 @@ const Classrooms = () => {
 
       const wsUrl = `ws://localhost:8000/api/classrooms/ws/${activeClass.class_id}/chat?user_id=${teacherId}&role=${role}`;
       const ws = new WebSocket(wsUrl);
-      
+
       ws.onopen = () => console.log("WebSocket Connected");
       ws.onmessage = (event) => {
         try {
@@ -263,17 +263,17 @@ const Classrooms = () => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if ((!message.trim() && !attachment) || !wsRef.current) return;
-    
+
     if (wsRef.current.readyState === WebSocket.OPEN) {
       let attachmentUrl = null;
       let attachmentType = null;
-      
+
       if (attachment) {
         setUploadingAttachment(true);
         const formData = new FormData();
         formData.append('file', attachment);
         try {
-          const res = await fetch('http://localhost:8000/api/classrooms/upload-attachment', {
+          const res = await fetch('https://appbackend.vwings247.me/api/classrooms/upload-attachment', {
             method: 'POST',
             body: formData
           });
@@ -315,11 +315,11 @@ const Classrooms = () => {
             </div>
           </div>
           {activeClass.meet_link ? (
-            <a 
-              href={activeClass.meet_link.startsWith('http') ? activeClass.meet_link : `https://${activeClass.meet_link}`} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="btn-primary" 
+            <a
+              href={activeClass.meet_link.startsWith('http') ? activeClass.meet_link : `https://${activeClass.meet_link}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
               style={{ padding: '8px 16px', gap: '8px', textDecoration: 'none', display: 'flex', alignItems: 'center' }}
             >
               <Video size={16} /> Join Video
@@ -330,20 +330,20 @@ const Classrooms = () => {
             </button>
           )}
         </div>
-        
+
         <div style={{ flex: 1, padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {chatHistory.map((msg, i) => (
             <div key={i} style={{ alignSelf: msg.sender === 'You' ? 'flex-end' : 'flex-start', background: msg.sender === 'You' ? 'var(--primary)' : 'rgba(0, 0, 0, 0.03)', padding: '12px 16px', borderRadius: '12px', maxWidth: '70%', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--text-main)' }}>
               <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', fontWeight: 'bold', color: msg.sender === 'You' ? 'rgba(255, 255, 255, 0.8)' : 'var(--primary)' }}>{msg.sender}</p>
-              
+
               {msg.attachment_url && msg.attachment_type === 'image' && (
-                <img src={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} alt="attachment" style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: '8px' }} />
+                <img src={`https://appbackend.vwings247.me/${msg.attachment_url.replace(/\\/g, '/')}`} alt="attachment" style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: '8px' }} />
               )}
               {msg.attachment_url && msg.attachment_type === 'pdf' && (
-                <a href={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--primary)', textDecoration: 'underline' }}>View PDF Document</a>
+                <a href={`https://appbackend.vwings247.me/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--primary)', textDecoration: 'underline' }}>View PDF Document</a>
               )}
               {msg.attachment_url && msg.attachment_type === 'file' && (
-                <a href={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--primary)', textDecoration: 'underline' }}>Download File</a>
+                <a href={`https://appbackend.vwings247.me/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--primary)', textDecoration: 'underline' }}>Download File</a>
               )}
 
               <p style={{ margin: 0, color: msg.sender === 'You' ? '#FFFFFF' : 'var(--text-main)' }}>{msg.text}</p>
@@ -356,12 +356,12 @@ const Classrooms = () => {
           {attachment && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--surface)', padding: '8px 12px', borderRadius: '8px', alignSelf: 'flex-start' }}>
               <span style={{ fontSize: '0.8rem' }}>{attachment.name}</span>
-              <button type="button" onClick={() => { setAttachment(null); if(fileInputRef.current) fileInputRef.current.value = ''; }} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 0 }}><X size={14} /></button>
+              <button type="button" onClick={() => { setAttachment(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 0 }}><X size={14} /></button>
             </div>
           )}
           <div style={{ display: 'flex', gap: '12px' }}>
-            <input 
-              type="file" 
+            <input
+              type="file"
               ref={fileInputRef}
               accept="image/*,.pdf"
               onChange={(e) => setAttachment(e.target.files[0])}
@@ -370,9 +370,9 @@ const Classrooms = () => {
             <button type="button" className="btn-secondary" onClick={() => fileInputRef.current.click()} style={{ borderRadius: '50%', width: '48px', height: '48px', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Upload size={20} />
             </button>
-            <input 
-              type="text" 
-              placeholder="Type a message..." 
+            <input
+              type="text"
+              placeholder="Type a message..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               style={{ flex: 1, background: 'var(--background)', border: '1px solid var(--border)', borderRadius: '24px', padding: '12px 20px', color: 'var(--text-main)' }}
@@ -388,10 +388,10 @@ const Classrooms = () => {
 
   return (
     <>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-panel" 
+        className="glass-panel"
         style={{ padding: '32px' }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
@@ -400,7 +400,7 @@ const Classrooms = () => {
             <Plus size={20} /> Create Classroom
           </button>
         </div>
-        
+
         {loading ? (
           <p>Loading classrooms...</p>
         ) : classrooms.length === 0 ? (
@@ -408,15 +408,15 @@ const Classrooms = () => {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {classrooms.map((cls) => {
-              const photoUrl = cls.class_photo ? `http://localhost:8000/${cls.class_photo.replace(/\\/g, '/')}` : null;
+              const photoUrl = cls.class_photo ? `https://appbackend.vwings247.me/${cls.class_photo.replace(/\\/g, '/')}` : null;
               return (
                 <div key={cls.class_id} className="glass-card" style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     {photoUrl && (
-                      <img 
-                        src={photoUrl} 
-                        alt={cls.class_name} 
-                        style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }} 
+                      <img
+                        src={photoUrl}
+                        alt={cls.class_name}
+                        style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
                       />
                     )}
                     <div>
@@ -450,7 +450,7 @@ const Classrooms = () => {
       <AnimatePresence>
         {isCreateModalOpen && (
           <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -465,8 +465,8 @@ const Classrooms = () => {
               <form onSubmit={createClassroom} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div>
                   <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px' }}>Classroom Name</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     required
                     value={newClassName}
                     onChange={(e) => setNewClassName(e.target.value)}
@@ -476,7 +476,7 @@ const Classrooms = () => {
                 </div>
                 <div>
                   <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px' }}>Description</label>
-                  <textarea 
+                  <textarea
                     value={newClassDesc}
                     onChange={(e) => setNewClassDesc(e.target.value)}
                     style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-main)', minHeight: '80px', fontFamily: 'inherit' }}
@@ -486,7 +486,7 @@ const Classrooms = () => {
                 <div style={{ display: 'flex', gap: '16px' }}>
                   <div style={{ flex: 1 }}>
                     <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px' }}>Date</label>
-                    <input 
+                    <input
                       type="date"
                       value={newClassDate}
                       onChange={(e) => setNewClassDate(e.target.value)}
@@ -495,7 +495,7 @@ const Classrooms = () => {
                   </div>
                   <div style={{ flex: 1 }}>
                     <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px' }}>Time</label>
-                    <input 
+                    <input
                       type="time"
                       value={newClassTime}
                       onChange={(e) => setNewClassTime(e.target.value)}
@@ -508,8 +508,8 @@ const Classrooms = () => {
                   <label style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', borderRadius: '8px', border: '1px dashed var(--border)', background: 'var(--surface)', cursor: 'pointer', color: 'var(--text-muted)' }}>
                     <Upload size={18} />
                     {newClassPhoto ? newClassPhoto.name : 'Upload an image (.jpg, .png)'}
-                    <input 
-                      type="file" 
+                    <input
+                      type="file"
                       accept="image/*"
                       onChange={(e) => setNewClassPhoto(e.target.files[0])}
                       style={{ display: 'none' }}
@@ -533,7 +533,7 @@ const Classrooms = () => {
       <AnimatePresence>
         {isManageModalOpen && (
           <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.7)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -552,8 +552,8 @@ const Classrooms = () => {
                   allStudents.map(student => {
                     const isSelected = selectedStudentIds.includes(student.student_id);
                     return (
-                      <div 
-                        key={student.student_id} 
+                      <div
+                        key={student.student_id}
                         onClick={() => toggleStudentSelection(student.student_id)}
                         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', border: '1px solid var(--border)', cursor: 'pointer', background: isSelected ? 'rgba(251, 191, 36, 0.1)' : 'transparent' }}
                       >

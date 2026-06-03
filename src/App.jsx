@@ -27,7 +27,7 @@ const Sidebar = ({ handleLogout, isOpen, onClose }) => {
   const location = useLocation();
   const { user } = useAuth();
 
-  const photoUrl = user?.profile_photo ? `http://localhost:8000/${user.profile_photo.replace(/\\/g, '/')}` : null;
+  const photoUrl = user?.profile_photo ? `https://appbackend.vwings247.me/${user.profile_photo.replace(/\\/g, '/')}` : null;
   const getInitials = (name) => {
     if (!name) return 'T';
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
@@ -68,7 +68,7 @@ const Sidebar = ({ handleLogout, isOpen, onClose }) => {
           <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{user?.teacher_id || 'TCH001'}</p>
         </div>
       </div>
-      
+
       <div className="nav-links">
         {links.map((link) => (
           <Link
@@ -95,13 +95,13 @@ const Sidebar = ({ handleLogout, isOpen, onClose }) => {
 
 const Topbar = ({ onMenuToggle }) => {
   const { user } = useAuth();
-  
+
   const getInitials = (name) => {
     if (!name) return 'ST';
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   };
-  
-  const photoUrl = user?.profile_photo ? `http://localhost:8000/${user.profile_photo.replace(/\\/g, '/')}` : null;
+
+  const photoUrl = user?.profile_photo ? `https://appbackend.vwings247.me/${user.profile_photo.replace(/\\/g, '/')}` : null;
 
   return (
     <div className="topbar">
@@ -126,7 +126,7 @@ const Topbar = ({ onMenuToggle }) => {
           )}
         </Link>
       </div>
-      </div>
+    </div>
   );
 };
 
@@ -198,95 +198,95 @@ function App() {
   return (
     <AuthContext.Provider value={{ user }}>
       <Routes>
-        <Route 
-          path="/login" 
-        element={
-          isAuthenticated ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
-        } 
-      />
-      
-      {/* Protected Routes */}
-      <Route 
-        path="/" 
-        element={
-          isAuthenticated ? (
-            <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
-              <Dashboard />
-            </AppLayout>
-          ) : <Navigate to="/login" />
-        } 
-      />
-      <Route 
-        path="/courses" 
-        element={
-          isAuthenticated ? (
-            <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
-              <Courses />
-            </AppLayout>
-          ) : <Navigate to="/login" />
-        } 
-      />
-      <Route 
-        path="/courses/:id" 
-        element={
-          isAuthenticated ? (
-            <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
-              <CourseDetails />
-            </AppLayout>
-          ) : <Navigate to="/login" />
-        } 
-      />
-      <Route 
-        path="/classrooms" 
-        element={
-          isAuthenticated ? (
-            <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
-              <Classrooms />
-            </AppLayout>
-          ) : <Navigate to="/login" />
-        } 
-      />
-      <Route 
-        path="/salary" 
-        element={
-          isAuthenticated ? (
-            <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
-              <Salary />
-            </AppLayout>
-          ) : <Navigate to="/login" />
-        } 
-      />
-      <Route 
-        path="/profile" 
-        element={
-          isAuthenticated ? (
-            <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
-              <Profile />
-            </AppLayout>
-          ) : <Navigate to="/login" />
-        } 
-      />
-      <Route 
-        path="/about" 
-        element={
-          isAuthenticated ? (
-            <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
-              <AboutUs />
-            </AppLayout>
-          ) : <Navigate to="/login" />
-        } 
-      />
-      <Route 
-        path="/help" 
-        element={
-          isAuthenticated ? (
-            <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
-              <HelpCenter />
-            </AppLayout>
-          ) : <Navigate to="/login" />
-        } 
-      />
-    </Routes>
+        <Route
+          path="/login"
+          element={
+            isAuthenticated ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
+          }
+        />
+
+        {/* Protected Routes */}
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
+                <Dashboard />
+              </AppLayout>
+            ) : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/courses"
+          element={
+            isAuthenticated ? (
+              <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
+                <Courses />
+              </AppLayout>
+            ) : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/courses/:id"
+          element={
+            isAuthenticated ? (
+              <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
+                <CourseDetails />
+              </AppLayout>
+            ) : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/classrooms"
+          element={
+            isAuthenticated ? (
+              <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
+                <Classrooms />
+              </AppLayout>
+            ) : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/salary"
+          element={
+            isAuthenticated ? (
+              <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
+                <Salary />
+              </AppLayout>
+            ) : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            isAuthenticated ? (
+              <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
+                <Profile />
+              </AppLayout>
+            ) : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            isAuthenticated ? (
+              <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
+                <AboutUs />
+              </AppLayout>
+            ) : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/help"
+          element={
+            isAuthenticated ? (
+              <AppLayout handleLogout={handleLogout} isOnline={isOnline}>
+                <HelpCenter />
+              </AppLayout>
+            ) : <Navigate to="/login" />
+          }
+        />
+      </Routes>
     </AuthContext.Provider>
   );
 }

@@ -6,7 +6,7 @@ import { useAuth } from '../AuthContext';
 const HelpCenter = () => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({ name: '', phone_no: '', email: '', problem_description: '' });
-  
+
   useEffect(() => {
     if (user) {
       setFormData(prev => ({
@@ -28,7 +28,7 @@ const HelpCenter = () => {
     e.preventDefault();
     setStatus('submitting');
     try {
-      const response = await fetch('http://localhost:8000/api/helpcenter/create', {
+      const response = await fetch('https://appbackend.vwings247.me/api/helpcenter/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -47,7 +47,7 @@ const HelpCenter = () => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '40px' }}
@@ -55,14 +55,14 @@ const HelpCenter = () => {
       {/* Top Card - Admin Support Center */}
       <div className="glass-card" style={{ padding: '40px', textAlign: 'center', marginBottom: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{
-          width: '80px', height: '80px', borderRadius: '20px', 
+          width: '80px', height: '80px', borderRadius: '20px',
           background: 'var(--surface)', border: '1px solid var(--border)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           marginBottom: '24px', boxShadow: 'var(--glass-shadow)'
         }}>
           <img src="/assets/V-Wings_Logo_nobg.png" alt="VWings Logo" style={{ width: '50px', objectFit: 'contain' }} />
         </div>
-        
+
         <h2 style={{ color: 'var(--primary-yellow)', fontSize: '28px', marginBottom: '12px' }}>Admin Support Center</h2>
         <p style={{ color: 'var(--text-main)', fontSize: '15px', maxWidth: '500px', margin: '0 auto 32px' }}>
           Get in touch with the VWings24x7 administration team for any queries or support requests.
@@ -115,81 +115,81 @@ const HelpCenter = () => {
           <div style={{ display: 'flex', gap: '20px' }}>
             <div style={{ position: 'relative', flex: 1 }}>
               <User size={18} style={{ position: 'absolute', left: '16px', top: '16px', color: 'var(--text-muted)' }} />
-              <input 
+              <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                placeholder="Full name" 
-                style={{ 
-                  width: '100%', padding: '16px 16px 16px 48px', 
-                  borderRadius: '12px', border: '1px solid var(--border)', 
+                placeholder="Full name"
+                style={{
+                  width: '100%', padding: '16px 16px 16px 48px',
+                  borderRadius: '12px', border: '1px solid var(--border)',
                   background: 'var(--surface)', color: 'var(--text-main)',
                   fontFamily: 'inherit'
-                }} 
+                }}
               />
             </div>
             <div style={{ position: 'relative', flex: 1 }}>
               <Phone size={18} style={{ position: 'absolute', left: '16px', top: '16px', color: 'var(--text-muted)' }} />
-              <input 
+              <input
                 type="text"
                 name="phone_no"
                 value={formData.phone_no}
                 onChange={handleInputChange}
                 required
-                placeholder="Phone number" 
-                style={{ 
-                  width: '100%', padding: '16px 16px 16px 48px', 
-                  borderRadius: '12px', border: '1px solid var(--border)', 
+                placeholder="Phone number"
+                style={{
+                  width: '100%', padding: '16px 16px 16px 48px',
+                  borderRadius: '12px', border: '1px solid var(--border)',
                   background: 'var(--surface)', color: 'var(--text-main)',
                   fontFamily: 'inherit'
-                }} 
+                }}
               />
             </div>
           </div>
-          
+
           <div style={{ position: 'relative' }}>
             <Mail size={18} style={{ position: 'absolute', left: '16px', top: '16px', color: 'var(--text-muted)' }} />
-            <input 
+            <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
               required
-              placeholder="Email address" 
-              style={{ 
-                width: '100%', padding: '16px 16px 16px 48px', 
-                borderRadius: '12px', border: '1px solid var(--border)', 
+              placeholder="Email address"
+              style={{
+                width: '100%', padding: '16px 16px 16px 48px',
+                borderRadius: '12px', border: '1px solid var(--border)',
                 background: 'var(--surface)', color: 'var(--text-main)',
                 fontFamily: 'inherit'
-              }} 
+              }}
             />
           </div>
 
           <div style={{ position: 'relative' }}>
             <MessageSquare size={18} style={{ position: 'absolute', left: '16px', top: '16px', color: 'var(--text-muted)' }} />
-            <textarea 
+            <textarea
               name="problem_description"
               value={formData.problem_description}
               onChange={handleInputChange}
               required
-              placeholder="Please describe your issue in detail..." 
+              placeholder="Please describe your issue in detail..."
               rows={6}
-              style={{ 
-                width: '100%', padding: '16px 16px 16px 48px', 
-                borderRadius: '12px', border: '1px solid var(--border)', 
+              style={{
+                width: '100%', padding: '16px 16px 16px 48px',
+                borderRadius: '12px', border: '1px solid var(--border)',
                 background: 'var(--surface)', color: 'var(--text-main)',
                 resize: 'vertical',
                 fontFamily: 'inherit'
-              }} 
+              }}
             />
           </div>
 
-          <button 
+          <button
             type="submit"
             disabled={status === 'submitting'}
-            className="btn-primary" 
+            className="btn-primary"
             style={{ width: '100%', marginTop: '12px', padding: '16px', fontSize: '16px', fontWeight: '600' }}
           >
             {status === 'submitting' ? 'Submitting...' : (

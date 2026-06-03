@@ -27,7 +27,7 @@ const Courses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/courses/get-all');
+        const response = await fetch('https://appbackend.vwings247.me/api/courses/get-all');
         if (!response.ok) {
           throw new Error('Failed to fetch courses');
         }
@@ -39,7 +39,7 @@ const Courses = () => {
         setLoading(false);
       }
     };
-    
+
     fetchCourses();
   }, []);
 
@@ -56,11 +56,11 @@ const Courses = () => {
   }
 
   return (
-    <motion.div 
+    <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="glass-panel" 
+      className="glass-panel"
       style={{ padding: '32px' }}
     >
       <h2 style={{ marginBottom: '24px' }}>Available Courses</h2>
@@ -70,9 +70,9 @@ const Courses = () => {
         <motion.div variants={containerVariants} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
           {courses.map((course) => (
             <motion.div key={course.course_id} variants={itemVariants} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-              <CourseCard 
-                course={course} 
-                onClick={() => navigate(`/courses/${course.course_id}`)} 
+              <CourseCard
+                course={course}
+                onClick={() => navigate(`/courses/${course.course_id}`)}
               />
             </motion.div>
           ))}

@@ -25,7 +25,7 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         // Fetch mock logged in teacher (first one)
-        const tchRes = await fetch('http://localhost:8000/api/teachers/get-all');
+        const tchRes = await fetch('https://appbackend.vwings247.me/api/teachers/get-all');
         let currentTeacher = null;
         if (tchRes.ok) {
           const tchData = await tchRes.json();
@@ -36,7 +36,7 @@ const Dashboard = () => {
         }
 
         // Fetch classrooms
-        const classRes = await fetch('http://localhost:8000/api/classrooms/get-all');
+        const classRes = await fetch('https://appbackend.vwings247.me/api/classrooms/get-all');
         if (classRes.ok) {
           const classData = await classRes.json();
           // Filter classes where teacher is assigned, or just show all if no teacher
@@ -45,7 +45,7 @@ const Dashboard = () => {
         }
 
         // Fetch announcements
-        const annRes = await fetch('http://localhost:8000/announcements/get-all/role/teacher');
+        const annRes = await fetch('https://appbackend.vwings247.me/announcements/get-all/role/teacher');
         if (annRes.ok) {
           const annData = await annRes.json();
           // Show active announcements targeted to teachers
@@ -54,7 +54,7 @@ const Dashboard = () => {
         }
 
         // Fetch featured courses
-        const coursesRes = await fetch('http://localhost:8000/api/courses/get-all');
+        const coursesRes = await fetch('https://appbackend.vwings247.me/api/courses/get-all');
         if (coursesRes.ok) {
           const coursesData = await coursesRes.json();
           setCourses(coursesData.slice(0, 4));
@@ -88,7 +88,7 @@ const Dashboard = () => {
   // Calculations
   const assignedCoursesCount = teacher?.courses_assigned?.length || 0;
   const courseNames = teacher?.courses_assigned?.map(c => c.course_name).join(', ') || 'None assigned yet';
-  
+
   // Calculate total unique students in the teacher's classrooms
   const activeStudents = new Set();
   classrooms.forEach(c => {
@@ -102,7 +102,7 @@ const Dashboard = () => {
   }
 
   return (
-    <motion.div 
+    <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="show"
@@ -144,7 +144,7 @@ const Dashboard = () => {
           <Bell size={24} color="var(--primary)" />
           <h3>Recent Notifications</h3>
         </div>
-        
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {announcements.length === 0 ? (
             <p style={{ color: 'var(--text-muted)' }}>No recent notifications.</p>
@@ -166,10 +166,10 @@ const Dashboard = () => {
         <h3 style={{ marginBottom: '16px' }}>Featured Programs</h3>
         <div style={{ display: 'flex', gap: '24px', overflowX: 'auto', paddingBottom: '16px' }}>
           {courses.map(course => (
-            <CarouselCard 
-              key={course.course_id} 
-              title={course.course_name} 
-              description={course.course_description || 'Learn the fundamentals of aviation.'} 
+            <CarouselCard
+              key={course.course_id}
+              title={course.course_name}
+              description={course.course_description || 'Learn the fundamentals of aviation.'}
             />
           ))}
           {courses.length === 0 && <p>No featured programs currently available.</p>}

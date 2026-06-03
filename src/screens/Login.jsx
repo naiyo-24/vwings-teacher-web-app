@@ -14,7 +14,7 @@ const Login = ({ onLogin }) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/teachers/login', {
+      const response = await fetch('https://appbackend.vwings247.me/api/teachers/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,18 +40,18 @@ const Login = ({ onLogin }) => {
 
   return (
     <div className="auth-container">
-      <motion.div 
+      <motion.div
         className="glass-card auth-card"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="auth-header">
-          <motion.div 
+          <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', damping: 15, delay: 0.2 }}
-            style={{ 
+            style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 20px', gap: '16px'
             }}
@@ -66,9 +66,9 @@ const Login = ({ onLogin }) => {
 
           <div className="input-group">
             <label>Email</label>
-            <input 
-              type="email" 
-              placeholder="faculty@vwings.com" 
+            <input
+              type="email"
+              placeholder="faculty@vwings.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -76,18 +76,18 @@ const Login = ({ onLogin }) => {
           </div>
           <div className="input-group">
             <label>Password</label>
-            <input 
-              type="password" 
-              placeholder="••••••••" 
+            <input
+              type="password"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
 
-          <motion.button 
-            type="submit" 
-            className="btn-primary" 
+          <motion.button
+            type="submit"
+            className="btn-primary"
             style={{ width: '100%', marginTop: '16px', padding: '16px', opacity: loading ? 0.7 : 1 }}
             whileHover={{ scale: loading ? 1 : 1.02 }}
             whileTap={{ scale: loading ? 1 : 0.98 }}
