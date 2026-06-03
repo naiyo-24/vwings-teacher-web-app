@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://appbackend.vwings247.me';
 
 const AdBanner = () => {
   const [ads, setAds] = useState([]);
@@ -29,12 +29,12 @@ const AdBanner = () => {
 
   useEffect(() => {
     if (ads.length <= 1 || isHovered) return;
-    
+
     // Progress bar logic
     const tick = 50; // update every 50ms
     const duration = 5000;
     let currentProgress = 0;
-    
+
     const interval = setInterval(() => {
       currentProgress += (tick / duration) * 100;
       if (currentProgress >= 100) {
@@ -43,7 +43,7 @@ const AdBanner = () => {
       }
       setProgress(currentProgress);
     }, tick);
-    
+
     return () => clearInterval(interval);
   }, [ads.length, isHovered, currentIndex]);
 
@@ -70,12 +70,12 @@ const AdBanner = () => {
   };
 
   return (
-    <div 
+    <div
       className="glass-card"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{ 
-        marginBottom: '28px', 
+      style={{
+        marginBottom: '28px',
         position: 'relative',
         overflow: 'hidden',
         background: 'linear-gradient(135deg, rgba(30, 27, 75, 0.9) 0%, rgba(88, 28, 135, 0.8) 100%)',
@@ -100,13 +100,13 @@ const AdBanner = () => {
           animate="center"
           exit="exit"
           transition={{ x: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
-          style={{ 
+          style={{
             position: 'absolute', width: '100%', height: '100%', padding: '0 60px',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxSizing: 'border-box', zIndex: 1
           }}
         >
-          <a 
-            href={currentAd.website_link ? (currentAd.website_link.startsWith('http') ? currentAd.website_link : `https://${currentAd.website_link}`) : '#'} 
+          <a
+            href={currentAd.website_link ? (currentAd.website_link.startsWith('http') ? currentAd.website_link : `https://${currentAd.website_link}`) : '#'}
             target={currentAd.website_link ? "_blank" : "_self"}
             rel="noreferrer"
             style={{ display: 'flex', alignItems: 'center', gap: '32px', flex: 1, textDecoration: 'none', cursor: currentAd.website_link ? 'pointer' : 'default' }}
@@ -140,9 +140,9 @@ const AdBanner = () => {
 
       {ads.length > 1 && (
         <>
-          <button 
+          <button
             onClick={handlePrev}
-            style={{ 
+            style={{
               position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', zIndex: 10,
               background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-main)', backdropFilter: 'blur(4px)',
               width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -153,9 +153,9 @@ const AdBanner = () => {
           >
             <ChevronLeft size={24} />
           </button>
-          <button 
+          <button
             onClick={handleNext}
-            style={{ 
+            style={{
               position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', zIndex: 10,
               background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-main)', backdropFilter: 'blur(4px)',
               width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -170,18 +170,18 @@ const AdBanner = () => {
           {/* Elegant Pill Indicators */}
           <div style={{ position: 'absolute', bottom: '16px', left: '0', width: '100%', display: 'flex', justifyContent: 'center', gap: '8px', zIndex: 10 }}>
             {ads.map((_, idx) => (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 onClick={() => { setDirection(idx > currentIndex ? 1 : -1); setCurrentIndex(idx); setProgress(0); }}
-                style={{ 
-                  width: currentIndex === idx ? '24px' : '8px', 
-                  height: '8px', 
-                  borderRadius: '4px', 
+                style={{
+                  width: currentIndex === idx ? '24px' : '8px',
+                  height: '8px',
+                  borderRadius: '4px',
                   background: currentIndex === idx ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.3)',
                   cursor: 'pointer',
                   transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                   boxShadow: currentIndex === idx ? '0 0 8px rgba(255,255,255,0.5)' : 'none'
-                }} 
+                }}
               />
             ))}
           </div>

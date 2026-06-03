@@ -15,7 +15,7 @@ const CourseDetails = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/courses/get-by/${id}`);
+        const response = await fetch(`https://appbackend.vwings247.me/api/courses/get-by/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch course details');
         }
@@ -27,7 +27,7 @@ const CourseDetails = () => {
         setLoading(false);
       }
     };
-    
+
     fetchCourse();
   }, [id]);
 
@@ -48,22 +48,22 @@ const CourseDetails = () => {
     return <div style={{ color: 'var(--text-main)', padding: '32px' }}>Course not found.</div>;
   }
 
-  const photoUrl = course.course_photo ? `http://localhost:8000/${course.course_photo.replace(/\\/g, '/')}` : null;
+  const photoUrl = course.course_photo ? `https://appbackend.vwings247.me/${course.course_photo.replace(/\\/g, '/')}` : null;
   const fees = course?.general_data?.course_fees ? `₹${course.general_data.course_fees}` : 'Contact for Info';
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-panel" 
+      className="glass-panel"
       style={{ padding: '32px' }}
     >
-      <button 
-        onClick={() => navigate('/courses')} 
-        style={{ 
-          background: 'transparent', 
-          border: 'none', 
-          color: 'var(--primary-yellow)', 
+      <button
+        onClick={() => navigate('/courses')}
+        style={{
+          background: 'transparent',
+          border: 'none',
+          color: 'var(--primary-yellow)',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
@@ -78,17 +78,17 @@ const CourseDetails = () => {
 
       <div className="course-header" style={{ marginBottom: '32px' }}>
         {photoUrl && (
-          <img 
-            src={photoUrl} 
-            alt={course.course_name} 
-            style={{ 
-              width: '100%', 
-              height: '300px', 
-              objectFit: 'cover', 
-              borderRadius: '12px', 
+          <img
+            src={photoUrl}
+            alt={course.course_name}
+            style={{
+              width: '100%',
+              height: '300px',
+              objectFit: 'cover',
+              borderRadius: '12px',
               marginBottom: '24px',
               border: '1px solid var(--glass-border)'
-            }} 
+            }}
           />
         )}
         <h1 style={{ color: 'var(--primary-yellow)', fontSize: '32px', marginBottom: '8px' }}>
@@ -118,7 +118,7 @@ const CourseDetails = () => {
             {course.medical_requirements && <li><strong>Medical:</strong> {course.medical_requirements}</li>}
           </ul>
         </div>
-        
+
         <div className="course-section">
           <h3 style={{ color: 'var(--text-main)', marginBottom: '16px', fontSize: '20px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
             Additional Details
@@ -136,24 +136,24 @@ const CourseDetails = () => {
       </div>
 
       <div style={{ marginTop: '40px', display: 'flex', gap: '16px', borderTop: '1px solid var(--border)', paddingTop: '24px', flexWrap: 'wrap' }}>
-        <button 
-          className="btn-primary" 
+        <button
+          className="btn-primary"
           style={{ padding: '12px 32px', fontSize: '18px' }}
           onClick={() => navigate('/classrooms')}
         >
           View Classrooms
         </button>
-        <button 
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '10px', 
-            background: 'white', 
-            color: '#384252', 
-            border: '2px solid #E2E8F0', 
-            borderRadius: '12px', 
-            padding: '12px 24px', 
-            fontSize: '18px', 
+        <button
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            background: 'white',
+            color: '#384252',
+            border: '2px solid #E2E8F0',
+            borderRadius: '12px',
+            padding: '12px 24px',
+            fontSize: '18px',
             fontWeight: '600',
             cursor: 'pointer'
           }}

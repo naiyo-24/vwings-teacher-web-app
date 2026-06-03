@@ -12,7 +12,7 @@ const Profile = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [passwordForm, setPasswordForm] = useState({ newPassword: '', confirmPassword: '' });
-  
+
   // Form fields
   const [formData, setFormData] = useState({
     full_name: '',
@@ -32,11 +32,11 @@ const Profile = () => {
   const fetchProfile = async () => {
     try {
       // In a real app, you would fetch by specific ID or get the logged-in user
-      const response = await fetch('http://localhost:8000/api/teachers/get-all');
+      const response = await fetch('https://appbackend.vwings247.me/api/teachers/get-all');
       if (response.ok) {
         const data = await response.json();
         if (data.length > 0) {
-          const t = data[0]; 
+          const t = data[0];
           setTeacher(t);
           setFormData({
             full_name: t.full_name || '',
@@ -52,9 +52,9 @@ const Profile = () => {
             ifsc_code: t.ifsc_code || '',
             upiid: t.upiid || ''
           });
-          
+
           if (t.profile_photo) {
-            setProfilePicPreview(`http://localhost:8000/${t.profile_photo.replace(/\\/g, '/')}`);
+            setProfilePicPreview(`https://appbackend.vwings247.me/${t.profile_photo.replace(/\\/g, '/')}`);
           }
         }
       }
@@ -87,13 +87,13 @@ const Profile = () => {
     }
 
     if (!teacher) return;
-    
+
     try {
       const updateData = new FormData();
       Object.keys(formData).forEach(key => {
         // Do not update email as it's typically readonly, but can be passed if backend allows
-        if(key !== 'email') {
-           updateData.append(key, formData[key]);
+        if (key !== 'email') {
+          updateData.append(key, formData[key]);
         }
       });
 
@@ -101,7 +101,7 @@ const Profile = () => {
         updateData.append('profile_photo', selectedFile);
       }
 
-      const response = await fetch(`http://localhost:8000/api/teachers/put-by/${teacher.teacher_id}`, {
+      const response = await fetch(`https://appbackend.vwings247.me/api/teachers/put-by/${teacher.teacher_id}`, {
         method: 'PUT',
         body: updateData
       });
@@ -133,7 +133,7 @@ const Profile = () => {
       const updateData = new FormData();
       updateData.append('password', passwordForm.newPassword);
 
-      const response = await fetch(`http://localhost:8000/api/teachers/put-by/${teacher.teacher_id}`, {
+      const response = await fetch(`https://appbackend.vwings247.me/api/teachers/put-by/${teacher.teacher_id}`, {
         method: 'PUT',
         body: updateData
       });
@@ -182,7 +182,7 @@ const Profile = () => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '40px' }}
@@ -201,21 +201,21 @@ const Profile = () => {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-        
+
         {/* Left Column - Basics & Contact */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          
+
           <div className="glass-panel" style={{ padding: '32px', textAlign: 'center' }}>
             <div style={{ width: '140px', height: '140px', borderRadius: '50%', background: 'var(--gradient-hero)', margin: '0 auto 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3.5rem', color: 'var(--text-main)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', position: 'relative', overflow: 'hidden' }}>
               {profilePicPreview ? (
-                <img src={profilePicPreview} style={{width: '100%', height: '100%', objectFit: 'cover'}} alt="Profile" />
+                <img src={profilePicPreview} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Profile" />
               ) : (
                 getInitials(teacher.full_name)
               )}
               {isEditing && (
-                <label style={{position: 'absolute', bottom: 0, background: 'rgba(255,255,255,0.9)', color: 'var(--text-main)', width: '100%', textAlign: 'center', padding: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold', backdropFilter: 'blur(4px)'}}>
+                <label style={{ position: 'absolute', bottom: 0, background: 'rgba(255,255,255,0.9)', color: 'var(--text-main)', width: '100%', textAlign: 'center', padding: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold', backdropFilter: 'blur(4px)' }}>
                   Upload New
-                  <input type="file" style={{display: 'none'}} accept="image/*" onChange={handleFileChange}/>
+                  <input type="file" style={{ display: 'none' }} accept="image/*" onChange={handleFileChange} />
                 </label>
               )}
             </div>
@@ -230,7 +230,7 @@ const Profile = () => {
             <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
               <Phone size={18} color="var(--primary)" /> Contact Details
             </h4>
-            
+
             <div className="input-group" style={{ marginBottom: '16px' }}>
               <label>Email ID</label>
               <input type="text" value={formData.email} disabled style={readOnlyStyle} />
@@ -252,12 +252,12 @@ const Profile = () => {
 
         {/* Right Column - Pro & Financial */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          
+
           <div className="glass-panel" style={{ padding: '24px' }}>
             <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
               <Briefcase size={18} color="var(--secondary)" /> Professional Details
             </h4>
-            
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px', marginBottom: '16px' }}>
               <div className="input-group">
                 <label>Qualification</label>
@@ -289,7 +289,7 @@ const Profile = () => {
             <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
               <CreditCard size={18} color="var(--success)" /> Financial Details
             </h4>
-            
+
             <div className="input-group" style={{ marginBottom: '16px' }}>
               <label>Bank Account Number</label>
               <input type="text" name="bank_account_no" value={formData.bank_account_no} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
@@ -314,7 +314,7 @@ const Profile = () => {
                 <input type="text" name="upiid" value={formData.upiid} onChange={handleInputChange} disabled={!isEditing} style={inputStyle} />
               </div>
             </div>
-            
+
             <div className="input-group" style={{ background: 'rgba(16, 185, 129, 0.05)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(16, 185, 129, 0.1)' }}>
               <label style={{ color: '#10b981' }}>Base Monthly Salary</label>
               <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>
@@ -346,8 +346,8 @@ const Profile = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             style={{
-              position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', 
-              backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', 
+              position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',
+              backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center',
               justifyContent: 'center', zIndex: 99999
             }}
           >
@@ -364,28 +364,28 @@ const Profile = () => {
               <h3 style={{ margin: '0 0 24px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Lock size={20} color="var(--primary)" /> Change Password
               </h3>
-              
+
               <div className="input-group" style={{ marginBottom: '16px' }}>
                 <label>New Password</label>
-                <input 
-                  type="password" 
-                  value={passwordForm.newPassword} 
-                  onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})} 
-                  style={{...inputStyle, background: 'var(--surface)'}} 
+                <input
+                  type="password"
+                  value={passwordForm.newPassword}
+                  onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+                  style={{ ...inputStyle, background: 'var(--surface)' }}
                   placeholder="Enter new password"
                 />
               </div>
               <div className="input-group" style={{ marginBottom: '24px' }}>
                 <label>Confirm New Password</label>
-                <input 
-                  type="password" 
-                  value={passwordForm.confirmPassword} 
-                  onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})} 
-                  style={{...inputStyle, background: 'var(--surface)'}} 
+                <input
+                  type="password"
+                  value={passwordForm.confirmPassword}
+                  onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
+                  style={{ ...inputStyle, background: 'var(--surface)' }}
                   placeholder="Confirm new password"
                 />
               </div>
-              
+
               <div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end' }}>
                 <button onClick={() => setIsPasswordModalOpen(false)} className="btn-secondary" style={{ padding: '10px 20px' }}>Cancel</button>
                 <button onClick={handlePasswordChange} className="btn-primary" style={{ padding: '10px 20px' }}>Update Password</button>
