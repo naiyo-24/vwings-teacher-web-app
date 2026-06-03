@@ -12,7 +12,7 @@ const WindStreak = ({ top, delay, duration, width }) => (
       top: top,
       width: width,
       height: '3px',
-      background: 'rgba(255, 255, 255, 0.5)',
+      background: 'var(--primary)',
       borderRadius: '2px',
       right: '50%'
     }}
@@ -96,10 +96,10 @@ const SplashScreen = ({ onComplete }) => {
               alt="VWings24x7 Logo" 
               style={{ width: '120px', height: '120px', objectFit: 'contain' }} 
             />
-            <h1 style={{ color: 'var(--primary-yellow)', fontSize: '48px', fontWeight: '800', marginTop: '16px', letterSpacing: '2px' }}>
+            <h1 className="text-gradient" style={{ fontSize: '48px', fontWeight: '800', marginTop: '16px', letterSpacing: '2px' }}>
               VWings24x7
             </h1>
-            <p style={{ color: 'var(--text-muted)', fontSize: '20px', marginTop: '12px', letterSpacing: '1px' }}>
+            <p style={{ color: 'var(--primary)', fontSize: '20px', marginTop: '12px', letterSpacing: '1px' }}>
               Your Wings to the Future ✈️
             </p>
           </motion.div>

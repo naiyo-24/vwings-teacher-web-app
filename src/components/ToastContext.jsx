@@ -72,8 +72,8 @@ export const ToastProvider = ({ children }) => {
               }}
             >
               <AlertCircle color="#f87171" size={48} style={{ margin: '0 auto 16px' }} />
-              <h3 style={{ margin: '0 0 16px 0', color: 'white', fontSize: '1.25rem' }}>Confirmation Required</h3>
-              <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '32px', lineHeight: '1.5' }}>{confirmDialog.message}</p>
+              <h3 style={{ margin: '0 0 16px 0', color: '#FFFFFF', fontSize: '1.25rem' }}>Confirmation Required</h3>
+              <p style={{ color: 'rgba(255, 255, 255, 0.7)', marginBottom: '32px', lineHeight: '1.5' }}>{confirmDialog.message}</p>
               <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
                 <button onClick={confirmDialog.onCancel} className="btn-secondary" style={{ flex: 1 }}>Cancel</button>
                 <button onClick={confirmDialog.onConfirm} className="btn-primary" style={{ flex: 1, background: '#f87171', color: 'white', border: 'none' }}>Yes, Continue</button>
@@ -96,7 +96,7 @@ export const ToastProvider = ({ children }) => {
                 backdropFilter: 'blur(12px)',
                 border: `1px solid ${t.type === 'success' ? 'rgba(74, 222, 128, 0.3)' : 'rgba(248, 113, 113, 0.3)'}`,
                 boxShadow: `0 8px 32px ${t.type === 'success' ? 'rgba(74, 222, 128, 0.15)' : 'rgba(248, 113, 113, 0.15)'}`,
-                color: 'white',
+                color: '#FFFFFF',
                 padding: '16px 20px',
                 borderRadius: '16px',
                 display: 'flex',
@@ -115,7 +115,7 @@ export const ToastProvider = ({ children }) => {
               <div style={{ flex: 1, fontWeight: '500', fontSize: '0.95rem', lineHeight: '1.4' }}>{t.message}</div>
               <button 
                 onClick={() => removeToast(t.id)} 
-                style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', padding: '4px', display: 'flex', flexShrink: 0 }}
+                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '4px', display: 'flex', flexShrink: 0 }}
                 onMouseEnter={(e) => e.currentTarget.style.color = 'white'}
                 onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
               >

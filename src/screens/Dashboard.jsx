@@ -98,7 +98,7 @@ const Dashboard = () => {
   });
 
   if (loading) {
-    return <div style={{ padding: '32px', color: 'white', textAlign: 'center' }}>Loading dashboard...</div>;
+    return <div style={{ padding: '32px', color: 'var(--text-main)', textAlign: 'center' }}>Loading dashboard...</div>;
   }
 
   return (
@@ -150,7 +150,7 @@ const Dashboard = () => {
             <p style={{ color: 'var(--text-muted)' }}>No recent notifications.</p>
           ) : (
             announcements.map((ann) => (
-              <div key={ann.announcement_id} style={{ padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div key={ann.announcement_id} style={{ padding: '16px', background: 'var(--surface)', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '16px' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary-yellow)' }}></div>
                 <div>
                   <h4 style={{ marginBottom: '4px' }}>{ann.headline}</h4>

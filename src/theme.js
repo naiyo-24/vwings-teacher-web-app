@@ -1,20 +1,20 @@
 export const theme = {
   colors: {
-    primary: '#FFFFFF',
-    primaryYellow: '#F5C300',
-    deepNavy: '#370E62',
-    magenta: '#B6007D',
+    primary: '#7B0771',
+    primaryYellow: '#C0BEC5', // Replaced with Light Gray
+    deepNavy: '#1A2134',
+    magenta: '#9E161B',
   },
   gradients: {
-    hero: 'linear-gradient(135deg, #370E62 0%, #B6007D 100%)',
-    card: 'linear-gradient(135deg, rgba(55, 14, 98, 0.7) 0%, rgba(182, 0, 125, 0.5) 100%)',
-    button: 'linear-gradient(135deg, #F5C300 0%, #FFD700 100%)',
+    hero: 'linear-gradient(135deg, #7B0771 0%, #9E161B 100%)',
+    card: 'linear-gradient(135deg, rgba(123, 7, 113, 0.7) 0%, rgba(158, 22, 27, 0.5) 100%)',
+    button: 'linear-gradient(135deg, #7B0771 0%, #9E161B 100%)',
   },
   glass: {
-    background: 'rgba(255, 255, 255, 0.1)',
-    border: 'rgba(255, 255, 255, 0.2)',
-    darkBackground: 'rgba(55, 14, 98, 0.3)',
-    darkBorder: 'rgba(55, 14, 98, 0.5)',
+    background: 'rgba(255, 255, 255, 0.85)',
+    border: 'rgba(192, 190, 197, 0.5)',
+    darkBackground: 'rgba(26, 33, 52, 0.05)',
+    darkBorder: 'rgba(57, 3, 6, 0.2)',
   },
   animation: {
     duration: {
@@ -29,7 +29,7 @@ export const theme = {
 };
 
 export const glassmorphicStyles = {
-  light: 'backdrop-blur-md bg-white/10 border border-white/20',
-  dark: 'backdrop-blur-md bg-[#370E62]/30 border border-[#370E62]/50',
-  card: 'backdrop-blur-lg bg-white/5 border border-white/10',
+  light: 'backdrop-blur-md bg-white/80 border border-[#C0BEC5]/50',
+  dark: 'backdrop-blur-md bg-[#1A2134]/10 border border-[#1A2134]/20',
+  card: 'backdrop-blur-lg bg-white/90 border border-[#C0BEC5]/30',
 };

@@ -157,16 +157,16 @@ const Profile = () => {
   };
 
   if (loading) {
-    return <div style={{ color: 'white', padding: '32px', textAlign: 'center' }}>Loading profile details...</div>;
+    return <div style={{ color: 'var(--text-main)', padding: '32px', textAlign: 'center' }}>Loading profile details...</div>;
   }
 
   if (!teacher) {
-    return <div style={{ color: 'white', padding: '32px', textAlign: 'center' }}>No teacher profile found.</div>;
+    return <div style={{ color: 'var(--text-main)', padding: '32px', textAlign: 'center' }}>No teacher profile found.</div>;
   }
 
   const inputStyle = {
-    background: isEditing ? 'var(--surface)' : 'rgba(255,255,255,0.03)',
-    border: isEditing ? '1px solid var(--primary)' : '1px solid rgba(255,255,255,0.05)',
+    background: isEditing ? 'var(--surface)' : 'var(--background)',
+    border: isEditing ? '1px solid var(--primary)' : '1px solid var(--border)',
     color: 'var(--text-main)',
     padding: '12px 16px',
     borderRadius: '12px',
@@ -176,8 +176,8 @@ const Profile = () => {
 
   const readOnlyStyle = {
     ...inputStyle,
-    background: 'rgba(255,255,255,0.02)',
-    border: '1px solid rgba(255,255,255,0.02)',
+    background: 'var(--surface)',
+    border: '1px solid var(--border)',
     opacity: 0.8
   };
 
@@ -190,8 +190,8 @@ const Profile = () => {
       {/* Header */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '24px', gap: '16px' }}>
         <div>
-          <h2 style={{ margin: 0, color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-            <User size={28} color="var(--primary-yellow)" /> My Profile
+          <h2 style={{ margin: 0, color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+            <User size={28} color="var(--primary)" /> My Profile
           </h2>
           <p style={{ margin: '4px 0 0', color: 'var(--text-muted)' }}>Manage your personal, professional, and financial details.</p>
         </div>
@@ -206,28 +206,28 @@ const Profile = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           
           <div className="glass-panel" style={{ padding: '32px', textAlign: 'center' }}>
-            <div style={{ width: '140px', height: '140px', borderRadius: '50%', background: 'var(--gradient-hero)', margin: '0 auto 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3.5rem', color: 'white', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ width: '140px', height: '140px', borderRadius: '50%', background: 'var(--gradient-hero)', margin: '0 auto 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3.5rem', color: 'var(--text-main)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)', position: 'relative', overflow: 'hidden' }}>
               {profilePicPreview ? (
                 <img src={profilePicPreview} style={{width: '100%', height: '100%', objectFit: 'cover'}} alt="Profile" />
               ) : (
                 getInitials(teacher.full_name)
               )}
               {isEditing && (
-                <label style={{position: 'absolute', bottom: 0, background: 'rgba(0,0,0,0.6)', width: '100%', textAlign: 'center', padding: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold', backdropFilter: 'blur(4px)'}}>
+                <label style={{position: 'absolute', bottom: 0, background: 'rgba(255,255,255,0.9)', color: 'var(--text-main)', width: '100%', textAlign: 'center', padding: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold', backdropFilter: 'blur(4px)'}}>
                   Upload New
                   <input type="file" style={{display: 'none'}} accept="image/*" onChange={handleFileChange}/>
                 </label>
               )}
             </div>
-            <h3 style={{ margin: 0, color: 'white', fontSize: '1.5rem' }}>{teacher.full_name}</h3>
-            <p style={{ margin: '4px 0 16px', color: 'var(--primary-yellow)', fontWeight: 'bold' }}>{teacher.teacher_id}</p>
+            <h3 style={{ margin: 0, color: 'var(--text-main)', fontSize: '1.5rem' }}>{teacher.full_name}</h3>
+            <p style={{ margin: '4px 0 16px', color: 'var(--text-muted)', fontWeight: 'bold' }}>{teacher.teacher_id}</p>
             <div style={{ display: 'inline-block', padding: '6px 16px', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>
               Active Faculty
             </div>
           </div>
 
           <div className="glass-panel" style={{ padding: '24px' }}>
-            <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'white', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px' }}>
+            <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
               <Phone size={18} color="var(--primary)" /> Contact Details
             </h4>
             
@@ -254,7 +254,7 @@ const Profile = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           
           <div className="glass-panel" style={{ padding: '24px' }}>
-            <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'white', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px' }}>
+            <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
               <Briefcase size={18} color="var(--secondary)" /> Professional Details
             </h4>
             
@@ -271,7 +271,7 @@ const Profile = () => {
 
             <div className="input-group">
               <label>Assigned Courses</label>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '12px', background: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)' }}>
                 {teacher.courses_assigned && teacher.courses_assigned.length > 0 ? (
                   teacher.courses_assigned.map(c => (
                     <span key={c.course_id} style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', padding: '6px 12px', borderRadius: '8px', fontSize: '0.85rem' }}>
@@ -286,7 +286,7 @@ const Profile = () => {
           </div>
 
           <div className="glass-panel" style={{ padding: '24px' }}>
-            <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'white', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px' }}>
+            <h4 style={{ margin: '0 0 20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
               <CreditCard size={18} color="var(--success)" /> Financial Details
             </h4>
             
@@ -317,7 +317,7 @@ const Profile = () => {
             
             <div className="input-group" style={{ background: 'rgba(16, 185, 129, 0.05)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(16, 185, 129, 0.1)' }}>
               <label style={{ color: '#10b981' }}>Base Monthly Salary</label>
-              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)' }}>
                 ₹ {teacher.monthly_salary ? teacher.monthly_salary.toLocaleString() : '0'}
               </div>
               <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>*Excludes commissions and bonuses</span>
@@ -325,7 +325,7 @@ const Profile = () => {
           </div>
 
           <div className="glass-panel" style={{ padding: '24px' }}>
-            <h4 style={{ margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'white' }}>
+            <h4 style={{ margin: '0 0 16px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-main)' }}>
               <Shield size={18} color="var(--warning)" /> Security
             </h4>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '16px' }}>
@@ -356,12 +356,12 @@ const Profile = () => {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               style={{
-                background: 'rgba(15, 15, 25, 0.95)', border: '1px solid var(--border)',
+                background: 'var(--surface)', border: '1px solid var(--border)',
                 borderRadius: '16px', padding: '32px', maxWidth: '400px', width: '100%',
                 boxShadow: '0 24px 48px rgba(0,0,0,0.5)'
               }}
             >
-              <h3 style={{ margin: '0 0 24px', color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h3 style={{ margin: '0 0 24px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Lock size={20} color="var(--primary)" /> Change Password
               </h3>
               
@@ -371,7 +371,7 @@ const Profile = () => {
                   type="password" 
                   value={passwordForm.newPassword} 
                   onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})} 
-                  style={{...inputStyle, background: 'rgba(255,255,255,0.05)'}} 
+                  style={{...inputStyle, background: 'var(--surface)'}} 
                   placeholder="Enter new password"
                 />
               </div>
@@ -381,7 +381,7 @@ const Profile = () => {
                   type="password" 
                   value={passwordForm.confirmPassword} 
                   onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})} 
-                  style={{...inputStyle, background: 'rgba(255,255,255,0.05)'}} 
+                  style={{...inputStyle, background: 'var(--surface)'}} 
                   placeholder="Confirm new password"
                 />
               </div>

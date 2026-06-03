@@ -91,11 +91,11 @@ const Salary = () => {
               </thead>
               <tbody>
                 {salaries.map((s, idx) => (
-                  <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <tr key={idx} style={{ borderBottom: '1px solid var(--border)' }}>
                     <td style={{ padding: '12px' }}>{s.teacher_id}</td>
                     <td style={{ padding: '12px' }}>{monthNames[s.month - 1]} {s.year}</td>
-                    <td style={{ padding: '12px', color: 'var(--primary-yellow)' }}>₹{(s.total_salary || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-                    <td style={{ padding: '12px', color: 'var(--secondary)' }}>{s.status || 'Paid'}</td>
+                    <td style={{ padding: '12px', color: 'var(--text-main)', fontWeight: 'bold' }}>₹{(s.total_salary || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    <td style={{ padding: '12px', color: '#10b981', fontWeight: 'bold' }}>{s.status || 'Paid'}</td>
                     <td style={{ padding: '12px' }}>
                       <button 
                         className="btn-secondary" 

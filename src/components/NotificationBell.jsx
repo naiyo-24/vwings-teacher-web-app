@@ -86,7 +86,7 @@ const NotificationBell = ({ role, userId }) => {
     top: 'calc(100% + 12px)',
     right: 0,
     background: 'rgba(5, 5, 15, 0.98)',
-    border: '1px solid var(--border, rgba(255,255,255,0.1))',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '16px',
     backdropFilter: 'blur(20px)',
     WebkitBackdropFilter: 'blur(20px)',
@@ -103,8 +103,8 @@ const NotificationBell = ({ role, userId }) => {
         animate={isWiggling ? { rotate: [0, -10, 10, -10, 10, 0] } : {}}
         transition={{ duration: 0.5 }}
         style={{ 
-          background: 'rgba(0,0,0,0.2)', border: '1px solid var(--border, rgba(255,255,255,0.1))', 
-          color: 'var(--text-main, white)', cursor: 'pointer', padding: '10px', 
+          background: 'var(--background)', border: '1px solid var(--border)', 
+          color: 'var(--text-main)', cursor: 'pointer', padding: '10px', 
           borderRadius: '12px', position: 'relative', display: 'flex', alignItems: 'center' 
         }}
       >
@@ -114,7 +114,7 @@ const NotificationBell = ({ role, userId }) => {
             initial={{ scale: 0 }} animate={{ scale: 1 }}
             style={{
               position: 'absolute', top: '-4px', right: '-4px',
-              background: '#ef4444', color: 'white', borderRadius: '50%',
+              background: '#ef4444', color: '#FFFFFF', borderRadius: '50%',
               width: '18px', height: '18px', fontSize: '10px',
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700'
             }}
@@ -133,17 +133,17 @@ const NotificationBell = ({ role, userId }) => {
             transition={{ duration: 0.2 }}
             style={dropdownStyle}
           >
-            <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontWeight: '600', fontSize: '0.95rem', color: 'var(--text-main, white)' }}>Notifications</span>
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontWeight: '600', fontSize: '0.95rem', color: '#FFFFFF' }}>Notifications</span>
               {unreadCount > 0 && (
-                <button onClick={markAllRead} style={{ background: 'none', border: 'none', color: 'var(--primary-yellow, #F5C300)', cursor: 'pointer', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <button onClick={markAllRead} style={{ background: 'none', border: 'none', color: 'var(--magenta)', cursor: 'pointer', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
                   <CheckCheck size={14} /> Mark all read
                 </button>
               )}
             </div>
             <div style={{ maxHeight: '360px', overflowY: 'auto' }}>
               {notifications.length === 0 ? (
-                <div style={{ padding: '24px', textAlign: 'center', color: 'var(--text-muted, rgba(255,255,255,0.5))', fontSize: '0.9rem' }}>
+                <div style={{ padding: '24px', textAlign: 'center', color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.9rem' }}>
                   No new notifications
                 </div>
               ) : notifications.map(notif => (
@@ -152,22 +152,22 @@ const NotificationBell = ({ role, userId }) => {
                   onClick={() => markRead(notif.notification_id, notif.is_read)}
                   style={{
                     padding: '14px 20px',
-                    borderBottom: '1px solid rgba(255,255,255,0.05)',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
                     cursor: 'pointer',
                     background: notif.is_read ? 'transparent' : 'rgba(245,195,0,0.05)',
                     transition: 'background 0.2s',
-                    color: 'var(--text-main, white)'
+                    color: '#FFFFFF'
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
                     <div>
-                      <div style={{ fontWeight: notif.is_read ? '400' : '600', fontSize: '0.88rem', marginBottom: '4px', color: 'var(--text-main, white)' }}>
-                        {!notif.is_read && <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--primary-yellow, #F5C300)', display: 'inline-block', marginRight: '8px' }} />}
+                      <div style={{ fontWeight: notif.is_read ? '400' : '600', fontSize: '0.88rem', marginBottom: '4px', color: '#FFFFFF' }}>
+                        {!notif.is_read && <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--magenta)', display: 'inline-block', marginRight: '8px' }} />}
                         {notif.title}
                       </div>
-                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted, rgba(255,255,255,0.7))' }}>{notif.message}</div>
+                      <div style={{ fontSize: '0.78rem', color: 'rgba(255, 255, 255, 0.7)' }}>{notif.message}</div>
                     </div>
-                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted, rgba(255,255,255,0.5))', whiteSpace: 'nowrap', flexShrink: 0 }}>
+                    <span style={{ fontSize: '0.72rem', color: 'rgba(255, 255, 255, 0.5)', whiteSpace: 'nowrap', flexShrink: 0 }}>
                       {new Date(notif.created_at).toLocaleDateString()}
                     </span>
                   </div>

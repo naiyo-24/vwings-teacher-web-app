@@ -14,7 +14,7 @@ const CourseDetailsModal = ({ course, isOpen, onClose }) => {
       >
         <button 
           onClick={onClose} 
-          style={{ position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: 'white', fontSize: '24px', cursor: 'pointer' }}
+          style={{ position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: 'var(--text-main)', fontSize: '24px', cursor: 'pointer' }}
         >
           &times;
         </button>

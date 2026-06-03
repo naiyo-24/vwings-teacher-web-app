@@ -19,6 +19,7 @@ import Footer from './components/Footer';
 import BgParticlesComponent from './components/BgParticlesComponent';
 import SplashScreen from './components/SplashScreen';
 import NotificationBell from './components/NotificationBell';
+import GlobalSearch from './components/GlobalSearch';
 import { AuthContext, useAuth } from './AuthContext';
 
 
@@ -44,22 +45,27 @@ const Sidebar = ({ handleLogout, isOpen, onClose }) => {
 
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-      <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-        <img src="/assets/V-Wings_Logo_nobg.png" alt="VWings24x7 Logo" style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
-        <span style={{ color: 'var(--primary-yellow)', fontSize: '24px', fontWeight: '800', letterSpacing: '0.5px' }}>VWings24x7</span>
+      <div className="brand" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <img src="/assets/V-Wings_Logo_nobg.png" alt="VWings24x7 Logo" style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
+          <span style={{ color: '#FFFFFF', fontSize: '20px', fontWeight: '800', letterSpacing: '0.5px' }}>VWings24x7</span>
+        </div>
+        <button className="close-sidebar-btn" onClick={onClose} aria-label="Close menu">
+          <X size={24} />
+        </button>
       </div>
 
-      <div style={{ background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+      <div style={{ background: 'var(--surface)', padding: '16px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
         {photoUrl ? (
-          <img src={photoUrl} alt="Profile" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary-yellow)' }} />
+          <img src={photoUrl} alt="Profile" style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--primary)' }} />
         ) : (
-          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--primary-yellow)', color: 'var(--deep-navy)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--primary)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
             {getInitials(user?.full_name)}
           </div>
         )}
         <div style={{ overflow: 'hidden' }}>
-          <p style={{ margin: 0, fontWeight: 'bold', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{user?.full_name || 'Teacher'}</p>
-          <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--secondary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{user?.teacher_id || 'TCH001'}</p>
+          <p style={{ margin: 0, fontWeight: 'bold', color: 'var(--text-main)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{user?.full_name || 'Teacher'}</p>
+          <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-muted)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{user?.teacher_id || 'TCH001'}</p>
         </div>
       </div>
       
@@ -77,10 +83,10 @@ const Sidebar = ({ handleLogout, isOpen, onClose }) => {
         ))}
       </div>
 
-      <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <button className="nav-item" onClick={() => { handleLogout(); onClose(); }} style={{ background: 'transparent', border: 'none', width: '100%', cursor: 'pointer', textAlign: 'left' }}>
-          <LogOut size={20} color="var(--danger)" />
-          <span style={{ color: 'var(--danger)' }}>Logout</span>
+      <div className="sidebar-footer">
+        <button className="nav-item logout-button" onClick={() => { handleLogout(); onClose(); }}>
+          <LogOut size={20} />
+          <span>Logout</span>
         </button>
       </div>
     </div>
@@ -109,6 +115,7 @@ const Topbar = ({ onMenuToggle }) => {
         </div>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+        <GlobalSearch />
         <NotificationBell role="teacher" userId={user?.teacher_id || "teacher"} />
 
         <Link to="/profile" style={{ textDecoration: 'none' }}>
@@ -139,7 +146,7 @@ const AppLayout = ({ children, handleLogout, isOnline }) => {
       <Sidebar handleLogout={handleLogout} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="main-content">
         {!isOnline && (
-          <div style={{ background: 'var(--danger)', color: 'white', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
+          <div style={{ background: 'var(--danger)', color: 'var(--text-main)', padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>
             You are currently offline. Check your internet connection.
           </div>
         )}

@@ -305,10 +305,10 @@ const Classrooms = () => {
 
   if (activeClass) {
     return (
-      <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="glass-panel" style={{ height: 'calc(100vh - 120px)', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ padding: '20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="glass-panel" style={{ height: 'calc(100vh - 120px)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ padding: '20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--surface)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <button onClick={() => setActiveClass(null)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'white' }}><ArrowLeft /></button>
+            <button onClick={() => setActiveClass(null)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-main)' }}><ArrowLeft /></button>
             <div>
               <h3 style={{ margin: 0 }}>{activeClass.class_name}</h3>
               <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--secondary)' }}>Live Session • {activeClass.class_id}</p>
@@ -333,26 +333,26 @@ const Classrooms = () => {
         
         <div style={{ flex: 1, padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {chatHistory.map((msg, i) => (
-            <div key={i} style={{ alignSelf: msg.sender === 'You' ? 'flex-end' : 'flex-start', background: msg.sender === 'You' ? 'var(--primary-yellow)' : 'var(--surface)', padding: '12px 16px', borderRadius: '12px', maxWidth: '70%', color: msg.sender === 'You' ? 'var(--deep-navy)' : 'white' }}>
-              <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', fontWeight: 'bold', color: msg.sender === 'You' ? 'var(--deep-navy)' : 'var(--primary-yellow)' }}>{msg.sender}</p>
+            <div key={i} style={{ alignSelf: msg.sender === 'You' ? 'flex-end' : 'flex-start', background: msg.sender === 'You' ? 'var(--primary)' : 'rgba(0, 0, 0, 0.03)', padding: '12px 16px', borderRadius: '12px', maxWidth: '70%', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--text-main)' }}>
+              <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', fontWeight: 'bold', color: msg.sender === 'You' ? 'rgba(255, 255, 255, 0.8)' : 'var(--primary)' }}>{msg.sender}</p>
               
               {msg.attachment_url && msg.attachment_type === 'image' && (
                 <img src={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} alt="attachment" style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: '8px' }} />
               )}
               {msg.attachment_url && msg.attachment_type === 'pdf' && (
-                <a href={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? 'var(--deep-navy)' : 'var(--primary-yellow)', textDecoration: 'underline' }}>View PDF Document</a>
+                <a href={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--primary)', textDecoration: 'underline' }}>View PDF Document</a>
               )}
               {msg.attachment_url && msg.attachment_type === 'file' && (
-                <a href={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? 'var(--deep-navy)' : 'var(--primary-yellow)', textDecoration: 'underline' }}>Download File</a>
+                <a href={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--primary)', textDecoration: 'underline' }}>Download File</a>
               )}
 
-              <p style={{ margin: 0 }}>{msg.text}</p>
-              <p style={{ margin: '4px 0 0 0', fontSize: '0.7rem', opacity: 0.7, textAlign: 'right' }}>{msg.time}</p>
+              <p style={{ margin: 0, color: msg.sender === 'You' ? '#FFFFFF' : 'var(--text-main)' }}>{msg.text}</p>
+              <p style={{ margin: '4px 0 0 0', fontSize: '0.7rem', opacity: 0.7, textAlign: 'right', color: msg.sender === 'You' ? 'rgba(255, 255, 255, 0.7)' : 'var(--text-muted)' }}>{msg.time}</p>
             </div>
           ))}
         </div>
 
-        <form onSubmit={handleSendMessage} style={{ padding: '20px', borderTop: '1px solid var(--border)', display: 'flex', gap: '12px', flexDirection: 'column' }}>
+        <form onSubmit={handleSendMessage} style={{ padding: '20px', borderTop: '1px solid var(--border)', display: 'flex', gap: '12px', flexDirection: 'column', background: 'var(--surface)' }}>
           {attachment && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--surface)', padding: '8px 12px', borderRadius: '8px', alignSelf: 'flex-start' }}>
               <span style={{ fontSize: '0.8rem' }}>{attachment.name}</span>
@@ -375,7 +375,7 @@ const Classrooms = () => {
               placeholder="Type a message..." 
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              style={{ flex: 1, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '24px', padding: '12px 20px', color: 'white' }}
+              style={{ flex: 1, background: 'var(--background)', border: '1px solid var(--border)', borderRadius: '24px', padding: '12px 20px', color: 'var(--text-main)' }}
             />
             <button type="submit" className="btn-primary" disabled={uploadingAttachment} style={{ borderRadius: '50%', width: '48px', height: '48px', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: uploadingAttachment ? 0.5 : 1 }}>
               <Send size={20} />
@@ -430,14 +430,14 @@ const Classrooms = () => {
                       <p style={{ fontSize: '0.8rem', color: 'var(--primary-yellow)', marginTop: '4px' }}>{cls.student_details?.length || 0} Students Enrolled</p>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', gap: '12px' }}>
-                    <button className="btn-secondary" onClick={() => openManageModal(cls)} style={{ padding: '8px 16px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                    <button className="btn-secondary" onClick={() => openManageModal(cls)} style={{ padding: '8px 16px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', flex: '1 1 auto', justifyContent: 'center' }}>
                       <Users size={16} /> Manage Students
                     </button>
-                    <button className="btn-secondary" onClick={() => deleteClassroom(cls.class_id)} style={{ padding: '8px 16px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', color: '#ef4444', borderColor: '#ef4444' }}>
+                    <button className="btn-secondary" onClick={() => deleteClassroom(cls.class_id)} style={{ padding: '8px 16px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', color: '#ef4444', borderColor: '#ef4444', flex: '1 1 auto', justifyContent: 'center' }}>
                       <Trash2 size={16} /> Delete
                     </button>
-                    <button className="btn-primary" onClick={() => setActiveClass(cls)} style={{ padding: '8px 16px', borderRadius: '8px' }}>Enter Classroom</button>
+                    <button className="btn-primary" onClick={() => setActiveClass(cls)} style={{ padding: '8px 16px', borderRadius: '8px', flex: '1 1 auto', justifyContent: 'center' }}>Enter Classroom</button>
                   </div>
                 </div>
               );
@@ -459,7 +459,7 @@ const Classrooms = () => {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <h3>Create New Classroom</h3>
-                <button onClick={() => setIsCreateModalOpen(false)} style={{ background: 'transparent', border: 'none', color: 'white', cursor: 'pointer' }}><X /></button>
+                <button onClick={() => setIsCreateModalOpen(false)} style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', cursor: 'pointer' }}><X /></button>
               </div>
 
               <form onSubmit={createClassroom} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -470,7 +470,7 @@ const Classrooms = () => {
                     required
                     value={newClassName}
                     onChange={(e) => setNewClassName(e.target.value)}
-                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'white' }}
+                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-main)' }}
                     placeholder="e.g. Advanced Aerodynamics"
                   />
                 </div>
@@ -479,7 +479,7 @@ const Classrooms = () => {
                   <textarea 
                     value={newClassDesc}
                     onChange={(e) => setNewClassDesc(e.target.value)}
-                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'white', minHeight: '80px', fontFamily: 'inherit' }}
+                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-main)', minHeight: '80px', fontFamily: 'inherit' }}
                     placeholder="Short description of the class..."
                   />
                 </div>
@@ -490,7 +490,7 @@ const Classrooms = () => {
                       type="date"
                       value={newClassDate}
                       onChange={(e) => setNewClassDate(e.target.value)}
-                      style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'white' }}
+                      style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-main)' }}
                     />
                   </div>
                   <div style={{ flex: 1 }}>
@@ -499,13 +499,13 @@ const Classrooms = () => {
                       type="time"
                       value={newClassTime}
                       onChange={(e) => setNewClassTime(e.target.value)}
-                      style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'white' }}
+                      style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-main)' }}
                     />
                   </div>
                 </div>
                 <div>
                   <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px' }}>Classroom Photo (Optional)</label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', borderRadius: '8px', border: '1px dashed var(--border)', background: 'rgba(255,255,255,0.05)', cursor: 'pointer', color: 'var(--text-muted)' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px', borderRadius: '8px', border: '1px dashed var(--border)', background: 'var(--surface)', cursor: 'pointer', color: 'var(--text-muted)' }}>
                     <Upload size={18} />
                     {newClassPhoto ? newClassPhoto.name : 'Upload an image (.jpg, .png)'}
                     <input 
@@ -542,7 +542,7 @@ const Classrooms = () => {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h3>Assign Students to {managingClass?.class_name}</h3>
-                <button onClick={() => setIsManageModalOpen(false)} style={{ background: 'transparent', border: 'none', color: 'white', cursor: 'pointer' }}><X /></button>
+                <button onClick={() => setIsManageModalOpen(false)} style={{ background: 'transparent', border: 'none', color: 'var(--text-main)', cursor: 'pointer' }}><X /></button>
               </div>
 
               <div style={{ flex: 1, overflowY: 'auto', marginBottom: '20px', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px' }}>
@@ -555,7 +555,7 @@ const Classrooms = () => {
                       <div 
                         key={student.student_id} 
                         onClick={() => toggleStudentSelection(student.student_id)}
-                        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', borderBottom: '1px solid rgba(255,255,255,0.05)', cursor: 'pointer', background: isSelected ? 'rgba(251, 191, 36, 0.1)' : 'transparent' }}
+                        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', border: '1px solid var(--border)', cursor: 'pointer', background: isSelected ? 'rgba(251, 191, 36, 0.1)' : 'transparent' }}
                       >
                         <div>
                           <p style={{ margin: 0, fontWeight: 'bold' }}>{student.full_name}</p>

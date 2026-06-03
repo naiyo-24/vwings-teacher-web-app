@@ -125,7 +125,7 @@ const HelpCenter = () => {
                 style={{ 
                   width: '100%', padding: '16px 16px 16px 48px', 
                   borderRadius: '12px', border: '1px solid var(--border)', 
-                  background: 'var(--surface)', color: 'white',
+                  background: 'var(--surface)', color: 'var(--text-main)',
                   fontFamily: 'inherit'
                 }} 
               />
@@ -142,7 +142,7 @@ const HelpCenter = () => {
                 style={{ 
                   width: '100%', padding: '16px 16px 16px 48px', 
                   borderRadius: '12px', border: '1px solid var(--border)', 
-                  background: 'var(--surface)', color: 'white',
+                  background: 'var(--surface)', color: 'var(--text-main)',
                   fontFamily: 'inherit'
                 }} 
               />
@@ -161,7 +161,7 @@ const HelpCenter = () => {
               style={{ 
                 width: '100%', padding: '16px 16px 16px 48px', 
                 borderRadius: '12px', border: '1px solid var(--border)', 
-                background: 'var(--surface)', color: 'white',
+                background: 'var(--surface)', color: 'var(--text-main)',
                 fontFamily: 'inherit'
               }} 
             />
@@ -179,7 +179,7 @@ const HelpCenter = () => {
               style={{ 
                 width: '100%', padding: '16px 16px 16px 48px', 
                 borderRadius: '12px', border: '1px solid var(--border)', 
-                background: 'var(--surface)', color: 'white',
+                background: 'var(--surface)', color: 'var(--text-main)',
                 resize: 'vertical',
                 fontFamily: 'inherit'
               }} 

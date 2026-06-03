@@ -57,7 +57,7 @@ const Login = ({ onLogin }) => {
             }}
           >
             <img src="/assets/V-Wings_Logo_nobg.png" alt="VWings24x7 Logo" style={{ width: '90px', height: '90px', objectFit: 'contain' }} />
-            <span style={{ color: 'var(--primary-yellow)', fontSize: '36px', fontWeight: '800', letterSpacing: '1px' }}>VWings24x7</span>
+            <span className="text-gradient" style={{ fontSize: '36px', fontWeight: '800', letterSpacing: '1px' }}>VWings24x7</span>
           </motion.div>
           <p>Faculty Portal Login</p>
         </div>

@@ -32,12 +32,12 @@ const CourseDetails = () => {
   }, [id]);
 
   if (loading) {
-    return <div style={{ color: 'white', padding: '32px' }}>Loading course details...</div>;
+    return <div style={{ color: 'var(--text-main)', padding: '32px' }}>Loading course details...</div>;
   }
 
   if (error) {
     return (
-      <div style={{ color: 'white', padding: '32px' }}>
+      <div style={{ color: 'var(--text-main)', padding: '32px' }}>
         <p style={{ color: 'var(--danger)', marginBottom: '16px' }}>Error: {error}</p>
         <button className="btn-secondary" onClick={() => navigate('/courses')}>Back to Courses</button>
       </div>
@@ -45,7 +45,7 @@ const CourseDetails = () => {
   }
 
   if (!course) {
-    return <div style={{ color: 'white', padding: '32px' }}>Course not found.</div>;
+    return <div style={{ color: 'var(--text-main)', padding: '32px' }}>Course not found.</div>;
   }
 
   const photoUrl = course.course_photo ? `http://localhost:8000/${course.course_photo.replace(/\\/g, '/')}` : null;
@@ -69,7 +69,8 @@ const CourseDetails = () => {
           alignItems: 'center',
           gap: '8px',
           marginBottom: '24px',
-          fontSize: '16px'
+          fontSize: '16px',
+          fontWeight: 'bold'
         }}
       >
         <ArrowLeft size={20} /> Back to Courses
@@ -98,14 +99,14 @@ const CourseDetails = () => {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px' }}>
         <div className="course-section">
-          <h3 style={{ color: 'white', marginBottom: '16px', fontSize: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
+          <h3 style={{ color: 'var(--text-main)', marginBottom: '16px', fontSize: '20px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
             Description
           </h3>
           <p style={{ lineHeight: '1.6', fontSize: '16px' }}>{course.course_description || 'No description available.'}</p>
         </div>
 
         <div className="course-section">
-          <h3 style={{ color: 'white', marginBottom: '16px', fontSize: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
+          <h3 style={{ color: 'var(--text-main)', marginBottom: '16px', fontSize: '20px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
             Requirements
           </h3>
           <ul style={{ listStyleType: 'disc', paddingLeft: '20px', lineHeight: '1.8' }}>
@@ -119,7 +120,7 @@ const CourseDetails = () => {
         </div>
         
         <div className="course-section">
-          <h3 style={{ color: 'white', marginBottom: '16px', fontSize: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>
+          <h3 style={{ color: 'var(--text-main)', marginBottom: '16px', fontSize: '20px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
             Additional Details
           </h3>
           <ul style={{ listStyleType: 'disc', paddingLeft: '20px', lineHeight: '1.8' }}>
@@ -134,7 +135,7 @@ const CourseDetails = () => {
         </div>
       </div>
 
-      <div style={{ marginTop: '40px', display: 'flex', gap: '16px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '24px', flexWrap: 'wrap' }}>
+      <div style={{ marginTop: '40px', display: 'flex', gap: '16px', borderTop: '1px solid var(--border)', paddingTop: '24px', flexWrap: 'wrap' }}>
         <button 
           className="btn-primary" 
           style={{ padding: '12px 32px', fontSize: '18px' }}

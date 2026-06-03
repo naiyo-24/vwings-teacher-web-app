@@ -79,10 +79,10 @@ const AdBanner = () => {
         position: 'relative',
         overflow: 'hidden',
         background: 'linear-gradient(135deg, rgba(30, 27, 75, 0.9) 0%, rgba(88, 28, 135, 0.8) 100%)',
-        border: '1px solid rgba(255, 255, 255, 0.15)',
+        border: '1px solid var(--border)',
         boxShadow: '0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
         borderRadius: '24px',
-        height: '180px',
+        height: '220px',
         display: 'flex',
         alignItems: 'center'
       }}
@@ -105,14 +105,19 @@ const AdBanner = () => {
             display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxSizing: 'border-box', zIndex: 1
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '32px', flex: 1 }}>
+          <a 
+            href={currentAd.website_link ? (currentAd.website_link.startsWith('http') ? currentAd.website_link : `https://${currentAd.website_link}`) : '#'} 
+            target={currentAd.website_link ? "_blank" : "_self"}
+            rel="noreferrer"
+            style={{ display: 'flex', alignItems: 'center', gap: '32px', flex: 1, textDecoration: 'none', cursor: currentAd.website_link ? 'pointer' : 'default' }}
+          >
             {currentAd.ad_image && (
               <motion.div
                 initial={{ scale: 0.8, rotate: -5 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: "spring", bounce: 0.5 }}
                 style={{
                   width: '120px', height: '120px', borderRadius: '20px', overflow: 'hidden',
                   boxShadow: '0 12px 24px rgba(0,0,0,0.5)', flexShrink: 0,
-                  border: '3px solid rgba(255,255,255,0.2)', background: 'white'
+                  border: '3px solid var(--border)', background: 'white'
                 }}
               >
                 <img src={`${API_BASE_URL}/${currentAd.ad_image}`} alt="Ad" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.display = 'none'; }} />
@@ -120,37 +125,16 @@ const AdBanner = () => {
             )}
             <div style={{ flex: 1 }}>
               <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
-                <span style={{ display: 'inline-block', padding: '4px 10px', background: 'rgba(245, 195, 0, 0.2)', color: 'var(--primary-yellow)', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
+                <span style={{ display: 'inline-block', padding: '4px 10px', background: 'rgba(255, 255, 255, 0.2)', color: '#FFFFFF', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
                   Sponsored
                 </span>
-                <h3 style={{ color: 'white', margin: '0 0 8px 0', fontSize: '1.6rem', fontWeight: '800', letterSpacing: '-0.5px' }}>
+                <h3 style={{ color: '#FFFFFF', margin: '0 0 8px 0', fontSize: '1.4rem', fontWeight: '800', letterSpacing: '-0.5px', lineHeight: '1.3', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                   {currentAd.headline}
                 </h3>
-                {currentAd.tagline && <p style={{ margin: 0, fontSize: '1rem', color: 'rgba(255,255,255,0.7)', maxWidth: '80%' }}>{currentAd.tagline}</p>}
+                {currentAd.tagline && <p style={{ margin: 0, fontSize: '0.95rem', color: 'rgba(255, 255, 255, 0.8)', maxWidth: '95%', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: '1.4' }}>{currentAd.tagline}</p>}
               </motion.div>
             </div>
-          </div>
-          
-          {currentAd.website_link && (
-            <motion.a 
-              href={currentAd.website_link.startsWith('http') ? currentAd.website_link : `https://${currentAd.website_link}`} 
-              target="_blank" rel="noreferrer" 
-              initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }}
-              style={{ textDecoration: 'none' }}
-            >
-              <motion.button 
-                whileHover={{ scale: 1.05, background: 'var(--primary-yellow)', color: 'black' }} 
-                whileTap={{ scale: 0.95 }}
-                style={{ 
-                  padding: '12px 24px', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '8px', 
-                  fontWeight: 'bold', background: 'rgba(255,255,255,0.1)', color: 'white',
-                  border: '1px solid rgba(255,255,255,0.2)', borderRadius: '14px', cursor: 'pointer', transition: 'all 0.2s'
-                }}
-              >
-                Learn More <ArrowRight size={18} />
-              </motion.button>
-            </motion.a>
-          )}
+          </a>
         </motion.div>
       </AnimatePresence>
 
@@ -160,7 +144,7 @@ const AdBanner = () => {
             onClick={handlePrev}
             style={{ 
               position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', zIndex: 10,
-              background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', backdropFilter: 'blur(4px)',
+              background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-main)', backdropFilter: 'blur(4px)',
               width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', opacity: isHovered ? 1 : 0, transition: 'all 0.3s'
             }}
@@ -173,7 +157,7 @@ const AdBanner = () => {
             onClick={handleNext}
             style={{ 
               position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', zIndex: 10,
-              background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', backdropFilter: 'blur(4px)',
+              background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-main)', backdropFilter: 'blur(4px)',
               width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', opacity: isHovered ? 1 : 0, transition: 'all 0.3s'
             }}
