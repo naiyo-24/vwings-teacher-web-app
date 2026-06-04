@@ -32,7 +32,7 @@ const Profile = () => {
   const fetchProfile = async () => {
     try {
       // In a real app, you would fetch by specific ID or get the logged-in user
-      const response = await fetch('http://localhost:8000/api/teachers/get-all');
+      const response = await fetch('https://appbackend.vwings247.me/api/teachers/get-all');
       if (response.ok) {
         const data = await response.json();
         if (data.length > 0) {
@@ -54,7 +54,7 @@ const Profile = () => {
           });
 
           if (t.profile_photo) {
-            setProfilePicPreview(`http://localhost:8000/${t.profile_photo.replace(/\\/g, '/')}`);
+            setProfilePicPreview(`https://appbackend.vwings247.me/${t.profile_photo.replace(/\\/g, '/')}`);
           }
         }
       }
@@ -101,7 +101,7 @@ const Profile = () => {
         updateData.append('profile_photo', selectedFile);
       }
 
-      const response = await fetch(`http://localhost:8000/api/teachers/put-by/${teacher.teacher_id}`, {
+      const response = await fetch(`https://appbackend.vwings247.me/api/teachers/put-by/${teacher.teacher_id}`, {
         method: 'PUT',
         body: updateData
       });
@@ -133,7 +133,7 @@ const Profile = () => {
       const updateData = new FormData();
       updateData.append('password', passwordForm.newPassword);
 
-      const response = await fetch(`http://localhost:8000/api/teachers/put-by/${teacher.teacher_id}`, {
+      const response = await fetch(`https://appbackend.vwings247.me/api/teachers/put-by/${teacher.teacher_id}`, {
         method: 'PUT',
         body: updateData
       });

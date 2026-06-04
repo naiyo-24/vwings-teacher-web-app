@@ -10,7 +10,7 @@ const Salary = () => {
   const fetchData = async () => {
     try {
       // Fetch salaries
-      const salResponse = await fetch('http://localhost:8000/api/salaries/get-all');
+      const salResponse = await fetch('https://appbackend.vwings247.me/api/salaries/get-all');
       let salData = [];
       if (salResponse.ok) {
         salData = await salResponse.json();
@@ -20,7 +20,7 @@ const Salary = () => {
       // Fetch teacher info (using first salary's teacher_id as mock for logged in user)
       if (salData.length > 0) {
         const teacherId = salData[0].teacher_id;
-        const tchResponse = await fetch(`http://localhost:8000/api/teachers/get-by/${teacherId}`);
+        const tchResponse = await fetch(`https://appbackend.vwings247.me/api/teachers/get-by/${teacherId}`);
         if (tchResponse.ok) {
           const tchData = await tchResponse.json();
           setTeacherInfo(tchData);
@@ -100,7 +100,7 @@ const Salary = () => {
                       <button
                         className="btn-secondary"
                         style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px' }}
-                        onClick={() => window.open(`http://localhost:8000/${s.file_path.replace(/\\\\/g, '/')}`, '_blank')}
+                        onClick={() => window.open(`https://appbackend.vwings247.me/${s.file_path.replace(/\\\\/g, '/')}`, '_blank')}
                       >
                         <Download size={16} /> Download
                       </button>

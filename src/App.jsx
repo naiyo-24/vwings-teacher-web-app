@@ -27,7 +27,7 @@ const Sidebar = ({ handleLogout, isOpen, onClose }) => {
   const location = useLocation();
   const { user } = useAuth();
 
-  const photoUrl = user?.profile_photo ? `http://localhost:8000/${user.profile_photo.replace(/\\/g, '/')}` : null;
+  const photoUrl = user?.profile_photo ? `https://appbackend.vwings247.me/${user.profile_photo.replace(/\\/g, '/')}` : null;
   const getInitials = (name) => {
     if (!name) return 'T';
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
@@ -101,7 +101,7 @@ const Topbar = ({ onMenuToggle }) => {
     return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
   };
 
-  const photoUrl = user?.profile_photo ? `http://localhost:8000/${user.profile_photo.replace(/\\/g, '/')}` : null;
+  const photoUrl = user?.profile_photo ? `https://appbackend.vwings247.me/${user.profile_photo.replace(/\\/g, '/')}` : null;
 
   return (
     <div className="topbar">

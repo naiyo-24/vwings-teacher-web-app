@@ -15,7 +15,7 @@ const CourseDetails = () => {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/courses/get-by/${id}`);
+        const response = await fetch(`https://appbackend.vwings247.me/api/courses/get-by/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch course details');
         }
@@ -48,7 +48,7 @@ const CourseDetails = () => {
     return <div style={{ color: 'var(--text-main)', padding: '32px' }}>Course not found.</div>;
   }
 
-  const photoUrl = course.course_photo ? `http://localhost:8000/${course.course_photo.replace(/\\/g, '/')}` : null;
+  const photoUrl = course.course_photo ? `https://appbackend.vwings247.me/${course.course_photo.replace(/\\/g, '/')}` : null;
   const fees = course?.general_data?.course_fees ? `₹${course.general_data.course_fees}` : 'Contact for Info';
 
   return (

@@ -39,7 +39,7 @@ const Classrooms = () => {
 
   const fetchClassrooms = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/classrooms/get/by-teacher/${teacherId}`);
+      const response = await fetch(`https://appbackend.vwings247.me/api/classrooms/get/by-teacher/${teacherId}`);
       if (response.ok) {
         const data = await response.json();
         setClassrooms(data);
@@ -61,7 +61,7 @@ const Classrooms = () => {
     setIsManageModalOpen(true);
 
     try {
-      const res = await fetch('http://localhost:8000/api/students/get-all');
+      const res = await fetch('https://appbackend.vwings247.me/api/students/get-all');
       if (res.ok) {
         const data = await res.json();
         setAllStudents(data);
@@ -87,7 +87,7 @@ const Classrooms = () => {
       const formData = new FormData();
       formData.append('student_ids', JSON.stringify(selectedStudentIds));
 
-      const response = await fetch(`http://localhost:8000/api/classrooms/update-by/teacher/${clsTeacherId}/${managingClass.class_id}`, {
+      const response = await fetch(`https://appbackend.vwings247.me/api/classrooms/update-by/teacher/${clsTeacherId}/${managingClass.class_id}`, {
         method: 'PUT',
         body: formData
       });
@@ -120,7 +120,7 @@ const Classrooms = () => {
       // Use logged in teacher ID
       let currentTeacherId = teacherId;
       try {
-        const tchRes = await fetch('http://localhost:8000/api/teachers/get-all');
+        const tchRes = await fetch('https://appbackend.vwings247.me/api/teachers/get-all');
         if (tchRes.ok) {
           const tchData = await tchRes.json();
           if (tchData.length > 0 && !user?.teacher_id) currentTeacherId = tchData[0].teacher_id;
@@ -137,7 +137,7 @@ const Classrooms = () => {
         formData.append('photo', newClassPhoto);
       }
 
-      const response = await fetch('http://localhost:8000/api/classrooms/create', {
+      const response = await fetch('https://appbackend.vwings247.me/api/classrooms/create', {
         method: 'POST',
         body: formData
       });
@@ -167,7 +167,7 @@ const Classrooms = () => {
     if (!await toast.confirm("Are you sure you want to delete this classroom? This action cannot be undone.")) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/classrooms/delete/${classId}`, {
+      const response = await fetch(`https://appbackend.vwings247.me/api/classrooms/delete/${classId}`, {
         method: 'DELETE',
       });
 
@@ -195,7 +195,7 @@ const Classrooms = () => {
 
     const loadMessagesAndConnect = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/classrooms/get-by/${activeClass.class_id}/messages`);
+        const res = await fetch(`https://appbackend.vwings247.me/api/classrooms/get-by/${activeClass.class_id}/messages`);
         if (res.ok) {
           const data = await res.json();
           const formattedHistory = data.map(msg => ({
@@ -212,7 +212,7 @@ const Classrooms = () => {
         console.error("Failed to load old messages", err);
       }
 
-      const wsUrl = `ws://localhost:8000/api/classrooms/ws/${activeClass.class_id}/chat?user_id=${teacherId}&role=${role}`;
+      const wsUrl = `wss://appbackend.vwings247.me/api/classrooms/ws/${activeClass.class_id}/chat?user_id=${teacherId}&role=${role}`;
       const ws = new WebSocket(wsUrl);
 
       ws.onopen = () => console.log("WebSocket Connected");
@@ -273,7 +273,7 @@ const Classrooms = () => {
         const formData = new FormData();
         formData.append('file', attachment);
         try {
-          const res = await fetch('http://localhost:8000/api/classrooms/upload-attachment', {
+          const res = await fetch('https://appbackend.vwings247.me/api/classrooms/upload-attachment', {
             method: 'POST',
             body: formData
           });
@@ -337,13 +337,13 @@ const Classrooms = () => {
               <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', fontWeight: 'bold', color: msg.sender === 'You' ? 'rgba(255, 255, 255, 0.8)' : 'var(--primary)' }}>{msg.sender}</p>
 
               {msg.attachment_url && msg.attachment_type === 'image' && (
-                <img src={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} alt="attachment" style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: '8px' }} />
+                <img src={`https://appbackend.vwings247.me/${msg.attachment_url.replace(/\\/g, '/')}`} alt="attachment" style={{ maxWidth: '100%', borderRadius: '8px', marginBottom: '8px' }} />
               )}
               {msg.attachment_url && msg.attachment_type === 'pdf' && (
-                <a href={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--primary)', textDecoration: 'underline' }}>View PDF Document</a>
+                <a href={`https://appbackend.vwings247.me/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--primary)', textDecoration: 'underline' }}>View PDF Document</a>
               )}
               {msg.attachment_url && msg.attachment_type === 'file' && (
-                <a href={`http://localhost:8000/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--primary)', textDecoration: 'underline' }}>Download File</a>
+                <a href={`https://appbackend.vwings247.me/${msg.attachment_url.replace(/\\/g, '/')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'block', marginBottom: '8px', color: msg.sender === 'You' ? '#FFFFFF' : 'var(--primary)', textDecoration: 'underline' }}>Download File</a>
               )}
 
               <p style={{ margin: 0, color: msg.sender === 'You' ? '#FFFFFF' : 'var(--text-main)' }}>{msg.text}</p>
@@ -408,7 +408,7 @@ const Classrooms = () => {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {classrooms.map((cls) => {
-              const photoUrl = cls.class_photo ? `http://localhost:8000/${cls.class_photo.replace(/\\/g, '/')}` : null;
+              const photoUrl = cls.class_photo ? `https://appbackend.vwings247.me/${cls.class_photo.replace(/\\/g, '/')}` : null;
               return (
                 <div key={cls.class_id} className="glass-card" style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>

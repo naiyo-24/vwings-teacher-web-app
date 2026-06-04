@@ -2,7 +2,7 @@ import React from 'react';
 
 const CourseCard = ({ course, onClick }) => {
   const fees = course?.general_data?.course_fees ? `₹${course.general_data.course_fees}` : 'Contact for Info';
-  const photoUrl = course.course_photo ? `http://localhost:8000/${course.course_photo.replace(/\\/g, '/')}` : null;
+  const photoUrl = course.course_photo ? `https://appbackend.vwings247.me/${course.course_photo.replace(/\\/g, '/')}` : null;
 
   return (
     <div className="glass-card" style={{ padding: '24px', cursor: 'pointer', display: 'flex', flexDirection: 'column' }} onClick={onClick}>

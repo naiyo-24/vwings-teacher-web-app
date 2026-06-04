@@ -27,7 +27,7 @@ const Courses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/courses/get-all');
+        const response = await fetch('https://appbackend.vwings247.me/api/courses/get-all');
         if (!response.ok) {
           throw new Error('Failed to fetch courses');
         }

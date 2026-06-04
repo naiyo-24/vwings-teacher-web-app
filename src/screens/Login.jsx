@@ -14,7 +14,7 @@ const Login = ({ onLogin }) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/teachers/login', {
+      const response = await fetch('https://appbackend.vwings247.me/api/teachers/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

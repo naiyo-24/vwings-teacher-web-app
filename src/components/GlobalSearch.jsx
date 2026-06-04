@@ -3,8 +3,8 @@ import { Search, Loader, X, BookOpen, User, Briefcase, HeartHandshake } from 'lu
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// const API_BASE_URL = 'http://localhost:8000';
-const API_BASE_URL = 'http://localhost:8000';
+// const API_BASE_URL = 'https://appbackend.vwings247.me';
+const API_BASE_URL = 'https://appbackend.vwings247.me';
 
 const GlobalSearch = () => {
   const [query, setQuery] = useState('');
